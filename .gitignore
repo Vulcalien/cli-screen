@@ -1,0 +1,6 @@
+# VSCode
+/.vscode/
+
+# Binary
+/obj
+/bin
