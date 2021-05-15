@@ -16,6 +16,8 @@
  */
 #include <stdio.h>
 
+#include "private/terminal.h"
+
 static void terminal_prepare_os(void);
 static void terminal_reset_os(void);
 
@@ -25,7 +27,7 @@ void screen_terminal_prepare(void) {
     terminal_prepare_os();
 
     fputs("\033[?25l", stdout); // hide cursor
-    fputs("\033[2J",   stdout); // clear
+    fputs("\033[2J",   stdout); // clear (move content up)
 }
 
 void screen_terminal_reset(void) {
@@ -58,6 +60,19 @@ void screen_terminal_reset(void) {
     static void terminal_reset_os(void) {
         tcsetattr(STDIN_FILENO, TCSANOW, &old);
     }
+
+    u32 screen_terminal_width(void) {
+        struct winsize ws;
+        ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws);
+        return ws.ws_col;
+    }
+
+    u32 screen_terminal_height(void) {
+        struct winsize ws;
+        ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws);
+        return ws.ws_row;
+    }
+
 #elif _WIN32
     #include <windows.h>
 
@@ -92,5 +107,15 @@ void screen_terminal_reset(void) {
     static void terminal_reset_os(void) {
         SetConsoleMode(h_in, old_in);
         SetConsoleMode(h_out, old_out);
+    }
+
+    u32 screen_terminal_width(void) {
+        // TODO
+        #error TODO undefined function
+    }
+
+    u32 screen_terminal_height(void) {
+        // TODO
+        #error TODO undefined function
     }
 #endif

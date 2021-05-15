@@ -21,6 +21,8 @@
 #include <string.h>
 #include <stdarg.h>
 
+#include "private/terminal.h"
+
 #define PRINTF_TMP_SIZE (256)
 
 struct screen {
@@ -32,11 +34,13 @@ struct screen {
     const char **colors;
 };
 
+static u32 last_term_w;
+static u32 last_term_h;
+
 struct screen *screen_create(u32 w, u32 h) {
     struct screen *scr = malloc(sizeof(struct screen));
 
-    // 'size + h' because we want a \n at the end of every line
-    u32 buffer_size = w * h + h;
+    u32 buffer_size = w * h;
 
     *scr = (struct screen) {
         .w = w,
@@ -59,23 +63,45 @@ void screen_destroy(struct screen **scr) {
 }
 
 void screen_render(struct screen *scr) {
-    fputs("\033[H", stdout); // move to top left corner
+    u32 term_w = screen_terminal_width();
+    u32 term_h = screen_terminal_height();
+    if(term_w != last_term_w
+       || term_h != last_term_h) {
+        last_term_w = term_w;
+        last_term_h = term_h;
+
+        // if the terminal dimension changed, clear the screen
+        fputs("\033[H", stdout); // move to top left corner
+        fputs("\033[J", stdout); // clear (delete from cursor to end of screen)
+    }
 
     const char *last_color = NULL;
 
-    for(u32 i = 0; i < scr->buffer_size; i++) {
-        char chr = scr->buffer[i];
-        const char *col = scr->colors[i];
+    // top-left is 1;1
+    u32 x0 = 1 + (term_w - scr->w) / 2;
+    u32 y0 = 1 + (term_h - scr->h) / 2;
 
-        if(col != last_color) {
-            fputs("\033[m", stdout); // reset color
-            if(col != NULL) {
-                fputs(col, stdout);
+    for(u32 y = 0; y < scr->h; y++) {
+        fprintf(stdout, "\033[%d;%dH", y0 + y, x0);
+
+        for(u32 x = 0; x < scr->w; x++) {
+            u32 i = x + y * scr->w;
+
+            char chr = scr->buffer[i];
+            const char *col = scr->colors[i];
+
+            // if color is different, reset and print the new one
+            if(col != last_color) {
+                fputs("\033[m", stdout); // reset color
+                if(col != NULL) {
+                    fputs(col, stdout);
+                }
+
+                last_color = col;
             }
 
-            last_color = col;
+            fputc(chr, stdout);
         }
-        fputc(chr, stdout);
     }
     fflush(stdout);
 }
@@ -86,12 +112,6 @@ void screen_clear(struct screen *scr,
         scr->buffer[i] = c;
         scr->colors[i] = color;
     }
-    for(u32 i = 0; i < scr->h; i++) {
-        u32 pos = (scr->w + 1) * (i + 1) - 1;
-
-        scr->buffer[pos] = '\n';
-        scr->colors[pos] = NULL;
-    }
 }
 
 void screen_setchar(struct screen *scr, u32 x, u32 y,
@@ -99,8 +119,8 @@ void screen_setchar(struct screen *scr, u32 x, u32 y,
     if(x < 0 || x >= scr->w) return;
     if(y < 0 || y >= scr->h) return;
 
-    scr->buffer[x + y * (scr->w + 1)] = c;
-    scr->colors[x + y * (scr->w + 1)] = color;
+    scr->buffer[x + y * scr->w] = c;
+    scr->colors[x + y * scr->w] = color;
 }
 
 void screen_puts(struct screen *scr, u32 x, u32 y,
