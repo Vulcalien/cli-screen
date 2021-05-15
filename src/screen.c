@@ -68,11 +68,11 @@ void screen_render(struct screen *scr) {
         const char *col = scr->colors[i];
 
         if(col != last_color) {
-            if(col == NULL) {
-                fputs("\033[m", stdout);
-            } else {
+            fputs("\033[m", stdout); // reset color
+            if(col != NULL) {
                 fputs(col, stdout);
             }
+
             last_color = col;
         }
         fputc(chr, stdout);
