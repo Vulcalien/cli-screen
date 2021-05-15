@@ -19,7 +19,7 @@
 
 #include "screen.h"
 
-u32 screen_terminal_width(void);
-u32 screen_terminal_height(void);
+extern u32 screen_terminal_width(void);
+extern u32 screen_terminal_height(void);
 
 #endif // VULC_CLISCREEN_PRIV_TERMINAL
