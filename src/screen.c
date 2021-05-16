@@ -32,10 +32,10 @@ struct screen {
     u32 buffer_size;
     char *buffer;
     const char **colors;
+
+    char ignored_char;
 };
 
-// static u32 last_term_w;
-// static u32 last_term_h;
 static struct terminal_size last_term_size;
 
 struct screen *screen_create(u32 w, u32 h) {
@@ -50,7 +50,9 @@ struct screen *screen_create(u32 w, u32 h) {
         .buffer_size = buffer_size,
 
         .buffer = calloc(buffer_size, sizeof(char)),
-        .colors = calloc(buffer_size, sizeof(const char *))
+        .colors = calloc(buffer_size, sizeof(const char *)),
+
+        .ignored_char = '\0' // '\0' no character is ignored
     };
     return scr;
 }
@@ -106,6 +108,10 @@ void screen_render(struct screen *scr) {
     fflush(stdout);
 }
 
+void screen_ignored_char(struct screen *scr, char c) {
+    scr->ignored_char = c;
+}
+
 void screen_clear(struct screen *scr,
                   char c, const char *color) {
     for(u32 i = 0; i < scr->buffer_size; i++) {
@@ -136,7 +142,9 @@ void screen_puts(struct screen *scr, u32 x, u32 y,
             xoff = 0;
             yoff++;
         } else {
-            screen_setchar(scr, x + xoff, y + yoff, c, color);
+            if(c != scr->ignored_char) {
+                screen_setchar(scr, x + xoff, y + yoff, c, color);
+            }
             xoff++;
         }
     }

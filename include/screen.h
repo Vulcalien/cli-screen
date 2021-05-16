@@ -14,7 +14,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
- * version: 0.2.0-WIP
+ * version: 0.2.0
  */
 #ifndef VULC_CLISCREEN_CORE
 #define VULC_CLISCREEN_CORE
@@ -51,6 +51,11 @@ extern void screen_terminal_prepare(void);
 extern void screen_terminal_reset(void);
 
 extern void screen_render(struct screen *scr);
+
+/* Set the ignored character.
+ * The ignored character is not rendered.
+ * Set to '\0' to disable ignored character. */
+extern void screen_ignored_char(struct screen *scr, char c);
 
 extern void screen_clear  (struct screen *scr,
                            char c, const char *color);
