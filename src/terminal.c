@@ -109,6 +109,6 @@ void screen_terminal_reset(void) {
         return (struct screen_terminal_size) {
             buf_info.srWindow.Right - buf_info.srWindow.Left + 1,
             buf_info.srWindow.Bottom - buf_info.srWindow.Top + 1
-        }
+        };
     }
 #endif
