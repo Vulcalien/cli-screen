@@ -61,16 +61,10 @@ void screen_terminal_reset(void) {
         tcsetattr(STDIN_FILENO, TCSANOW, &old);
     }
 
-    u32 screen_terminal_width(void) {
+    struct screen_terminal_size screen_terminal_size(void) {
         struct winsize ws;
         ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws);
-        return ws.ws_col;
-    }
-
-    u32 screen_terminal_height(void) {
-        struct winsize ws;
-        ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws);
-        return ws.ws_row;
+        return (struct screen_terminal_size) {ws.ws_col, ws.ws_row};
     }
 
 #elif _WIN32
@@ -109,13 +103,12 @@ void screen_terminal_reset(void) {
         SetConsoleMode(h_out, old_out);
     }
 
-    u32 screen_terminal_width(void) {
-        // TODO
-        #error TODO undefined function
-    }
-
-    u32 screen_terminal_height(void) {
-        // TODO
-        #error TODO undefined function
+    struct screen_terminal_size screen_terminal_size(void) {
+        CONSOLE_SCREEN_BUFFER_INFO buf_info;
+        GetConsoleScreenBufferInfo(h_out, &buf_info);
+        return (struct screen_terminal_size) {
+            buf_info.srWindow.Right - buf_info.srWindow.Left + 1,
+            buf_info.srWindow.Bottom - buf_info.srWindow.Top + 1
+        }
     }
 #endif

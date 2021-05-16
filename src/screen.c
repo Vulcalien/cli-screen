@@ -34,8 +34,9 @@ struct screen {
     const char **colors;
 };
 
-static u32 last_term_w;
-static u32 last_term_h;
+// static u32 last_term_w;
+// static u32 last_term_h;
+static struct screen_terminal_size last_term_size;
 
 struct screen *screen_create(u32 w, u32 h) {
     struct screen *scr = malloc(sizeof(struct screen));
@@ -63,12 +64,11 @@ void screen_destroy(struct screen **scr) {
 }
 
 void screen_render(struct screen *scr) {
-    u32 term_w = screen_terminal_width();
-    u32 term_h = screen_terminal_height();
-    if(term_w != last_term_w
-       || term_h != last_term_h) {
-        last_term_w = term_w;
-        last_term_h = term_h;
+    struct screen_terminal_size term_size = screen_terminal_size();
+
+    if(term_size.w != last_term_size.w
+       || term_size.h != last_term_size.h) {
+        last_term_size = term_size;
 
         // if the terminal dimension changed, clear the screen
         fputs("\033[H", stdout); // move to top left corner
@@ -78,8 +78,8 @@ void screen_render(struct screen *scr) {
     const char *last_color = NULL;
 
     // top-left is 1;1
-    u32 x0 = 1 + (term_w - scr->w) / 2;
-    u32 y0 = 1 + (term_h - scr->h) / 2;
+    u32 x0 = 1 + (term_size.w - scr->w) / 2;
+    u32 y0 = 1 + (term_size.h - scr->h) / 2;
 
     for(u32 y = 0; y < scr->h; y++) {
         fprintf(stdout, "\033[%d;%dH", y0 + y, x0);
