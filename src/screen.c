@@ -36,7 +36,7 @@ struct screen {
 
 // static u32 last_term_w;
 // static u32 last_term_h;
-static struct screen_terminal_size last_term_size;
+static struct terminal_size last_term_size;
 
 struct screen *screen_create(u32 w, u32 h) {
     struct screen *scr = malloc(sizeof(struct screen));
@@ -64,7 +64,7 @@ void screen_destroy(struct screen **scr) {
 }
 
 void screen_render(struct screen *scr) {
-    struct screen_terminal_size term_size = screen_terminal_size();
+    struct terminal_size term_size = screen_terminal_size();
 
     if(term_size.w != last_term_size.w
        || term_size.h != last_term_size.h) {
