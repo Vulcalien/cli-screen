@@ -29,8 +29,8 @@ struct screen {
     u32 w;
     u32 h;
 
-    u32 buffer_size;
-    char *buffer;
+    u32 raster_size;
+    char *raster;
     const char **colors;
 
     char ignored_char;
@@ -41,16 +41,16 @@ static struct terminal_size last_term_size;
 struct screen *screen_create(u32 w, u32 h) {
     struct screen *scr = malloc(sizeof(struct screen));
 
-    u32 buffer_size = w * h;
+    u32 raster_size = w * h;
 
     *scr = (struct screen) {
         .w = w,
         .h = h,
 
-        .buffer_size = buffer_size,
+        .raster_size = raster_size,
 
-        .buffer = calloc(buffer_size, sizeof(char)),
-        .colors = calloc(buffer_size, sizeof(const char *)),
+        .raster = calloc(raster_size, sizeof(char)),
+        .colors = calloc(raster_size, sizeof(const char *)),
 
         .ignored_char = '\0' // '\0' no character is ignored
     };
@@ -58,7 +58,7 @@ struct screen *screen_create(u32 w, u32 h) {
 }
 
 void screen_destroy(struct screen **scr) {
-    free((*scr)->buffer);
+    free((*scr)->raster);
     free((*scr)->colors);
     free(*scr);
 
@@ -89,7 +89,7 @@ void screen_render(struct screen *scr) {
         for(u32 x = 0; x < scr->w; x++) {
             u32 i = x + y * scr->w;
 
-            char chr = scr->buffer[i];
+            char chr = scr->raster[i];
             const char *col = scr->colors[i];
 
             // if color is different, reset and print the new one
@@ -114,8 +114,8 @@ void screen_ignored_char(struct screen *scr, char c) {
 
 void screen_clear(struct screen *scr,
                   char c, const char *color) {
-    for(u32 i = 0; i < scr->buffer_size; i++) {
-        scr->buffer[i] = c;
+    for(u32 i = 0; i < scr->raster_size; i++) {
+        scr->raster[i] = c;
         scr->colors[i] = color;
     }
 }
@@ -125,7 +125,7 @@ void screen_setchar(struct screen *scr, u32 x, u32 y,
     if(x < 0 || x >= scr->w) return;
     if(y < 0 || y >= scr->h) return;
 
-    scr->buffer[x + y * scr->w] = c;
+    scr->raster[x + y * scr->w] = c;
     scr->colors[x + y * scr->w] = color;
 }
 
