@@ -21,6 +21,7 @@
 #include <string.h>
 #include <stdarg.h>
 
+#include "private/scrbuffer.h"
 #include "private/terminal.h"
 
 #define PRINTF_TMP_SIZE (256)
@@ -30,10 +31,13 @@ struct screen {
     u32 h;
 
     u32 raster_size;
+
     char *raster;
     const char **colors;
 
     char ignored_char;
+
+    struct scrbuffer *buf;
 };
 
 static struct terminal_size last_term_size;
@@ -42,6 +46,11 @@ struct screen *screen_create(u32 w, u32 h) {
     struct screen *scr = malloc(sizeof(struct screen));
 
     u32 raster_size = w * h;
+
+    /* since there will be ANSI codes in the buffer, other
+     * than the characters in the raster, 1 * raster_size is
+     * surely not enought */
+    u32 initial_buffer_size = 2 * raster_size;
 
     *scr = (struct screen) {
         .w = w,
@@ -52,7 +61,17 @@ struct screen *screen_create(u32 w, u32 h) {
         .raster = calloc(raster_size, sizeof(char)),
         .colors = calloc(raster_size, sizeof(const char *)),
 
-        .ignored_char = '\0' // '\0' no character is ignored
+        // '\0' means: no character is ignored
+        .ignored_char = '\0',
+    };
+
+    scr->buf = malloc(sizeof(struct scrbuffer));
+    *(scr->buf) = (struct scrbuffer) {
+        .size = initial_buffer_size,
+        .used = 0,
+        .chr_buf  = malloc(initial_buffer_size * sizeof(char)),
+
+        .inc_step = raster_size
     };
     return scr;
 }
@@ -60,6 +79,11 @@ struct screen *screen_create(u32 w, u32 h) {
 void screen_destroy(struct screen **scr) {
     free((*scr)->raster);
     free((*scr)->colors);
+
+    // scrbuffer
+    free((*scr)->buf->chr_buf);
+    free((*scr)->buf);
+
     free(*scr);
 
     *scr = NULL;
@@ -68,13 +92,14 @@ void screen_destroy(struct screen **scr) {
 void screen_render(struct screen *scr) {
     struct terminal_size term_size = screen_terminal_size();
 
+    // if the terminal dimension changed, clear the screen
     if(term_size.w != last_term_size.w
        || term_size.h != last_term_size.h) {
         last_term_size = term_size;
 
-        // if the terminal dimension changed, clear the screen
-        fputs("\033[H", stdout); // move to top left corner
-        fputs("\033[J", stdout); // clear (delete from cursor to end of screen)
+        // "\033[H" - move to top left corner
+        // "\033[J" - clear (delete from cursor to end of screen)
+        screen_scrbuffer_puts(scr->buf, "\033[H" "\033[J");
     }
 
     const char *last_color = NULL;
@@ -84,7 +109,7 @@ void screen_render(struct screen *scr) {
     u32 y0 = 1 + (term_size.h - scr->h) / 2;
 
     for(u32 y = 0; y < scr->h; y++) {
-        fprintf(stdout, "\033[%d;%dH", y0 + y, x0);
+        screen_scrbuffer_printf(scr->buf, "\033[%d;%dH", y0 + y, x0);
 
         for(u32 x = 0; x < scr->w; x++) {
             u32 i = x + y * scr->w;
@@ -94,18 +119,18 @@ void screen_render(struct screen *scr) {
 
             // if color is different, reset and print the new one
             if(col != last_color) {
-                fputs("\033[m", stdout); // reset color
+                screen_scrbuffer_puts(scr->buf, "\033[m"); // reset color
                 if(col != NULL) {
-                    fputs(col, stdout);
+                    screen_scrbuffer_puts(scr->buf, col);
                 }
 
                 last_color = col;
             }
 
-            fputc(chr, stdout);
+            screen_scrbuffer_putc(scr->buf, chr);
         }
     }
-    fflush(stdout);
+    screen_scrbuffer_flush(scr->buf);
 }
 
 void screen_ignored_char(struct screen *scr, char c) {
