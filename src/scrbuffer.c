@@ -25,6 +25,7 @@
     #include <unistd.h>
 #elif _WIN32
     #include <windows.h>
+    #include "private/terminal.h"
 #endif
 
 #define PRINTF_TMP_SIZE (256)
@@ -65,7 +66,8 @@ void screen_scrbuffer_flush(struct scrbuffer *buf) {
     #ifdef __unix__
         write(STDOUT_FILENO, buf->chr_buf, buf->used);
     #elif _WIN32
-        // TODO windows flush code...
+        DWORD written;
+        WriteConsoleA(h_out, buf->chr_buf, buf->used, &written, NULL);
     #endif
 
     buf->used = 0;

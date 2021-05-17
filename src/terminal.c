@@ -70,8 +70,8 @@ void screen_terminal_reset(void) {
 #elif _WIN32
     #include <windows.h>
 
-    static HANDLE h_in = NULL;
-    static HANDLE h_out = NULL;
+    HANDLE h_in = NULL;
+    HANDLE h_out = NULL;
 
     static DWORD old_out;
     static DWORD old_in;
