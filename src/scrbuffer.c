@@ -74,13 +74,10 @@ void screen_scrbuffer_flush(struct scrbuffer *buf) {
 }
 
 static void check_buffer(struct scrbuffer *buf, u32 requested_space) {
-    // XXX this is probably broken
-
-    // TODO optimize, using a while here is not necessary
-    // instead of reallocating many times, find out how much you need to
-    // expand, instead of increasing size by a 1 inc_step at a time
+    // I could write some complex code that uses an 'if' and math, but
+    // since the buffer should expand rarely, this 'while' is acceptable
     while(buf->used + requested_space > buf->size) {
         buf->size += buf->inc_step;
-        buf->chr_buf = realloc(buf->chr_buf, buf->size * sizeof(char));
     }
+    buf->chr_buf = realloc(buf->chr_buf, buf->size * sizeof(char));
 }
