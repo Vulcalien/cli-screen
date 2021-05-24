@@ -39,6 +39,14 @@ void screen_terminal_reset(void) {
     terminal_reset_os();
 }
 
+u32 screen_terminal_width(void) {
+    return screen_terminal_size().w;
+}
+
+u32 screen_terminal_height(void) {
+    return screen_terminal_size().h;
+}
+
 #ifdef __unix__
     #include <unistd.h>
     #include <termios.h>

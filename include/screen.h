@@ -72,4 +72,10 @@ extern void screen_terminal_prepare(void);
 /* Undo screen_terminal_prepare. */
 extern void screen_terminal_reset(void);
 
+/* Return the terminal's current width. */
+extern u32 screen_terminal_width(void);
+
+/* Return the terminal's current height. */
+extern u32 screen_terminal_height(void);
+
 #endif // VULC_CLISCREEN_CORE
