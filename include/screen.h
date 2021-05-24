@@ -14,7 +14,7 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
- * version: 0.2.1
+ * version: 0.3.0-WIP
  */
 #ifndef VULC_CLISCREEN_CORE
 #define VULC_CLISCREEN_CORE
@@ -28,8 +28,7 @@ struct screen;
  * screen_destroy before the program ends. */
 extern struct screen *screen_create(u32 w, u32 h);
 
-/* Free any allocated memory and set the screen
- * pointer to NULL */
+/* Free any allocated memory and set the pointer to NULL */
 extern void screen_destroy(struct screen **scr);
 
 /* Prepare the terminal for the rendering.

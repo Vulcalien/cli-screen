@@ -33,6 +33,31 @@
 /* Check if the buffer has enought space. If not, expand it. */
 static void check_buffer(struct scrbuffer *buf, u32 requested_space);
 
+struct scrbuffer *screen_scrbuffer_create(u32 raster_size) {
+    struct scrbuffer *buf = malloc(sizeof(struct scrbuffer));
+
+    /* since there will be ANSI codes in the buffer, other
+     * than the characters in the raster, 1 * raster_size is
+     * surely not enought */
+    u32 initial_size = 2 * raster_size;
+
+    *buf = (struct scrbuffer) {
+        .size = initial_size,
+        .used = 0,
+        .chr_buf = malloc(initial_size * sizeof(char)),
+
+        .inc_step = raster_size
+    };
+    return buf;
+}
+
+void screen_scrbuffer_destroy(struct scrbuffer **buf) {
+    free((*buf)->chr_buf);
+    free(*buf);
+
+    *buf = NULL;
+}
+
 extern void screen_scrbuffer_putc(struct scrbuffer *buf, char chr) {
     check_buffer(buf, 1);
     buf->chr_buf[buf->used] = chr;

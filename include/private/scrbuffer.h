@@ -27,6 +27,12 @@ struct scrbuffer {
     u32 inc_step;
 };
 
+/* Create a screen buffer. */
+extern struct scrbuffer *screen_scrbuffer_create(u32 raster_size);
+
+/* Destroy a screen buffer and set the pointer to NULL. */
+extern void screen_scrbuffer_destroy(struct scrbuffer **buf);
+
 /* Put a character inside a screen buffer. */
 extern void screen_scrbuffer_putc(struct scrbuffer *buf, char chr);
 

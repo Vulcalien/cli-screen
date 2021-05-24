@@ -47,11 +47,6 @@ struct screen *screen_create(u32 w, u32 h) {
 
     u32 raster_size = w * h;
 
-    /* since there will be ANSI codes in the buffer, other
-     * than the characters in the raster, 1 * raster_size is
-     * surely not enought */
-    u32 initial_buffer_size = 2 * raster_size;
-
     *scr = (struct screen) {
         .w = w,
         .h = h,
@@ -64,15 +59,8 @@ struct screen *screen_create(u32 w, u32 h) {
         // '\0' means: no character is ignored
         .ignored_char = '\0',
     };
+    scr->buf = screen_scrbuffer_create(raster_size);
 
-    scr->buf = malloc(sizeof(struct scrbuffer));
-    *(scr->buf) = (struct scrbuffer) {
-        .size = initial_buffer_size,
-        .used = 0,
-        .chr_buf  = malloc(initial_buffer_size * sizeof(char)),
-
-        .inc_step = raster_size
-    };
     return scr;
 }
 
@@ -80,9 +68,7 @@ void screen_destroy(struct screen **scr) {
     free((*scr)->raster);
     free((*scr)->colors);
 
-    // scrbuffer
-    free((*scr)->buf->chr_buf);
-    free((*scr)->buf);
+    screen_scrbuffer_destroy(&(*scr)->buf);
 
     free(*scr);
 
