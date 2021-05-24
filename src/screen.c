@@ -35,53 +35,66 @@ struct screen {
     char *raster;
     const char **colors;
 
-    char ignored_char;
-
     struct scrbuffer *buf;
+
+    char ignored_char;
+    bool should_clear_term;
 };
 
-static struct terminal_size last_term_size;
+static void screen_free_memory(struct screen *scr);
 
-struct screen *screen_create(u32 w, u32 h) {
-    struct screen *scr = malloc(sizeof(struct screen));
+static struct terminal_size last_term_size = {.w = 0, .h = 0};
 
-    u32 raster_size = w * h;
-
-    *scr = (struct screen) {
-        .w = w,
-        .h = h,
-
-        .raster_size = raster_size,
-
-        .raster = calloc(raster_size, sizeof(char)),
-        .colors = calloc(raster_size, sizeof(const char *)),
-
-        // '\0' means: no character is ignored
-        .ignored_char = '\0',
-    };
-    scr->buf = screen_scrbuffer_create(raster_size);
-
+struct screen *screen_create(void) {
+    // calloc sets everything to 0 or (if pointer) NULL
+    struct screen *scr = calloc(1, sizeof(struct screen));
     return scr;
 }
 
+static void screen_free_memory(struct screen *scr) {
+    if(scr->raster) free(scr->raster);
+    if(scr->colors) free(scr->colors);
+    if(scr->buf)    screen_scrbuffer_destroy(&scr->buf);
+}
+
 void screen_destroy(struct screen **scr) {
-    free((*scr)->raster);
-    free((*scr)->colors);
-
-    screen_scrbuffer_destroy(&(*scr)->buf);
-
+    screen_free_memory(*scr);
     free(*scr);
 
     *scr = NULL;
 }
 
+void screen_setsize(struct screen *scr, u32 w, u32 h) {
+    screen_free_memory(scr);
+
+    u32 raster_size = w * h;
+
+    scr->w = w;
+    scr->h = h;
+
+    scr->raster_size = raster_size;
+
+    scr->raster = calloc(raster_size, sizeof(char));
+    scr->colors = calloc(raster_size, sizeof(const char *));
+
+    scr->buf = screen_scrbuffer_create(raster_size);
+
+    scr->should_clear_term = true;
+}
+
 void screen_render(struct screen *scr) {
     struct terminal_size term_size = screen_terminal_size();
 
-    // if the terminal dimension changed, clear the screen
+    // if the terminal dimension changed, clear the terminal
     if(term_size.w != last_term_size.w
        || term_size.h != last_term_size.h) {
         last_term_size = term_size;
+
+        scr->should_clear_term = true;
+    }
+
+    if(scr->should_clear_term) {
+        scr->should_clear_term = false;
 
         // "\033[H" - move to top left corner
         // "\033[J" - clear (delete from cursor to end of screen)
@@ -115,6 +128,9 @@ void screen_render(struct screen *scr) {
 
             screen_scrbuffer_putc(scr->buf, chr);
         }
+    }
+    if(last_color != NULL) {
+        screen_scrbuffer_puts(scr->buf, "\033[m"); // reset color
     }
     screen_scrbuffer_flush(scr->buf);
 }

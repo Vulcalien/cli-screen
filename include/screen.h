@@ -24,12 +24,35 @@
 struct screen;
 
 /* Create the screen object.
- * This function allocates memory, so call
- * screen_destroy before the program ends. */
-extern struct screen *screen_create(u32 w, u32 h);
+ * Call screen_destroy to destroy it. */
+extern struct screen *screen_create(void);
 
-/* Free any allocated memory and set the pointer to NULL */
+/* Destroy the screen object and set the pointer to NULL */
 extern void screen_destroy(struct screen **scr);
+
+/* Set the screen size. */
+extern void screen_setsize(struct screen *scr, u32 w, u32 h);
+
+extern void screen_render(struct screen *scr);
+
+/* Set the ignored character.
+ * The ignored character is not rendered.
+ * Set to '\0' to disable ignored character. */
+extern void screen_ignored_char(struct screen *scr, char c);
+
+extern void screen_clear  (struct screen *scr,
+                           char c, const char *color);
+extern void screen_setchar(struct screen *scr, u32 x, u32 y,
+                           char c, const char *color);
+extern void screen_puts   (struct screen *scr, u32 x, u32 y,
+                           const char *str, const char *color);
+extern void screen_printf (struct screen *scr, u32 x, u32 y,
+                           const char *color,
+                           const char *format, ...);
+
+//
+// TERMINAL functions
+//
 
 /* Prepare the terminal for the rendering.
  *
@@ -48,22 +71,5 @@ extern void screen_terminal_prepare(void);
 
 /* Undo screen_terminal_prepare. */
 extern void screen_terminal_reset(void);
-
-extern void screen_render(struct screen *scr);
-
-/* Set the ignored character.
- * The ignored character is not rendered.
- * Set to '\0' to disable ignored character. */
-extern void screen_ignored_char(struct screen *scr, char c);
-
-extern void screen_clear  (struct screen *scr,
-                           char c, const char *color);
-extern void screen_setchar(struct screen *scr, u32 x, u32 y,
-                           char c, const char *color);
-extern void screen_puts   (struct screen *scr, u32 x, u32 y,
-                           const char *str, const char *color);
-extern void screen_printf (struct screen *scr, u32 x, u32 y,
-                           const char *color,
-                           const char *format, ...);
 
 #endif // VULC_CLISCREEN_CORE
