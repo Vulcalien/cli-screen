@@ -22,19 +22,23 @@ static void terminal_prepare_os(void);
 static void terminal_reset_os(void);
 
 void screen_terminal_prepare(void) {
-    // on Windows this activates ANSI codes,
+    // on Windows this enables ANSI codes,
     // so this must be done at the beginning
     terminal_prepare_os();
 
-    fputs("\033[?25l", stdout); // hide cursor
-    fputs("\033[2J",   stdout); // clear (move content up)
+    // "\033[?25l" - hide cursor
+    // "\033[2J"   - clear (move content up)
+    fputs("\033[?25l" "\033[2J", stdout); // hide cursor
+    fflush(stdout);
 }
 
 void screen_terminal_reset(void) {
-    fputs("\033[?25h", stdout); // show cursor
-    fputs("\033[m",    stdout); // reset color
+    // "\033[?25h" - show cursor
+    // "\033[m"    - reset color
+    fputs("\033[?25h" "\033[m", stdout);
+    fflush(stdout);
 
-    // on Windows this usually disables ANSI codes,
+    // on Windows this may disable ANSI codes,
     // so this must be done at the end
     terminal_reset_os();
 }

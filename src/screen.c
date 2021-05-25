@@ -118,7 +118,8 @@ void screen_render(struct screen *scr) {
 
             // if color is different, reset and print the new one
             if(col != last_color) {
-                screen_scrbuffer_puts(scr->buf, "\033[m"); // reset color
+                // "\033[m" - reset color
+                screen_scrbuffer_puts(scr->buf, "\033[m");
                 if(col != NULL) {
                     screen_scrbuffer_puts(scr->buf, col);
                 }
@@ -130,7 +131,8 @@ void screen_render(struct screen *scr) {
         }
     }
     if(last_color != NULL) {
-        screen_scrbuffer_puts(scr->buf, "\033[m"); // reset color
+        // "\033[m" - reset color
+        screen_scrbuffer_puts(scr->buf, "\033[m");
     }
     screen_scrbuffer_flush(scr->buf);
 }
