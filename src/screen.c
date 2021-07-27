@@ -31,6 +31,9 @@ struct screen {
 
     u32 raster_size;
 
+    u32 align_x;
+    u32 align_y;
+
     char *raster;
     const char **colors;
 
@@ -47,6 +50,10 @@ static struct terminal_size last_term_size = {.w = 0, .h = 0};
 struct screen *screen_create(void) {
     // calloc sets everything to 0 or (if pointer) NULL
     struct screen *scr = calloc(1, sizeof(struct screen));
+
+    scr->align_x = SCREEN_ALIGN_X_CENTER;
+    scr->align_y = SCREEN_ALIGN_Y_MIDDLE;
+
     return scr;
 }
 
@@ -81,6 +88,13 @@ void screen_setsize(struct screen *scr, u32 w, u32 h) {
     scr->should_clear_term = true;
 }
 
+void screen_setalign(struct screen *scr, u32 align_x, u32 align_y) {
+    scr->align_x = align_x;
+    scr->align_y = align_y;
+
+    scr->should_clear_term = true;
+}
+
 void screen_render(struct screen *scr) {
     struct terminal_size term_size = screen_terminal_size();
 
@@ -102,9 +116,17 @@ void screen_render(struct screen *scr) {
 
     const char *last_color = NULL;
 
-    // top-left is 1;1
-    u32 x0 = 1 + (term_size.w - scr->w) / 2;
-    u32 y0 = 1 + (term_size.h - scr->h) / 2;
+    // top-left is 1;1 so add 1 to each coordinate
+    u32 x0 = 1
+             + (scr->align_x == SCREEN_ALIGN_X_CENTER)  // if align_x is center
+             * ((term_size.w - scr->w) / 2)
+             + (scr->align_x == SCREEN_ALIGN_X_RIGHT)   // if align_x is right
+             * (term_size.w - scr->w);
+    u32 y0 = 1
+             + (scr->align_y == SCREEN_ALIGN_Y_MIDDLE)  // if align_y is middle
+             * ((term_size.h - scr->h) / 2)
+             + (scr->align_y == SCREEN_ALIGN_Y_BOTTOM)  // if align_y is bottom
+             * (term_size.h - scr->h);
 
     for(u32 y = 0; y < scr->h; y++) {
         screen_scrbuffer_printf(scr->buf, "\033[%d;%dH", y0 + y, x0);

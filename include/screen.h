@@ -13,12 +13,20 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  *
- * version: 0.3.2-WIP
+ * version: 0.3.2
  */
 #ifndef VULC_CLISCREEN_CORE
 #define VULC_CLISCREEN_CORE
 
 #include "vulcalien/vulcalien.h"
+
+#define SCREEN_ALIGN_X_LEFT   (0)
+#define SCREEN_ALIGN_X_CENTER (1)
+#define SCREEN_ALIGN_X_RIGHT  (2)
+
+#define SCREEN_ALIGN_Y_TOP    (0)
+#define SCREEN_ALIGN_Y_MIDDLE (1)
+#define SCREEN_ALIGN_Y_BOTTOM (2)
 
 struct screen;
 
@@ -31,6 +39,9 @@ extern void screen_destroy(struct screen **scr);
 
 /* Set the screen size. */
 extern void screen_setsize(struct screen *scr, u32 w, u32 h);
+
+/* Set the screen alignment. */
+extern void screen_setalign(struct screen *scr, u32 align_x, u32 align_y);
 
 extern void screen_render(struct screen *scr);
 
