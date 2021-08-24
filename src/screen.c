@@ -47,7 +47,7 @@ static void screen_free_memory(struct screen *scr);
 
 static struct terminal_size last_term_size = {.w = 0, .h = 0};
 
-struct screen *screen_create(void) {
+EXPORT struct screen *screen_create(void) {
     // calloc sets everything to 0 or (if pointer) NULL
     struct screen *scr = calloc(1, sizeof(struct screen));
 
@@ -63,14 +63,14 @@ static void screen_free_memory(struct screen *scr) {
     if(scr->buf)    screen_scrbuffer_destroy(&scr->buf);
 }
 
-void screen_destroy(struct screen **scr) {
+EXPORT void screen_destroy(struct screen **scr) {
     screen_free_memory(*scr);
     free(*scr);
 
     *scr = NULL;
 }
 
-void screen_setsize(struct screen *scr, u32 w, u32 h) {
+EXPORT void screen_setsize(struct screen *scr, u32 w, u32 h) {
     screen_free_memory(scr);
 
     u32 raster_size = w * h;
@@ -88,14 +88,14 @@ void screen_setsize(struct screen *scr, u32 w, u32 h) {
     scr->should_clear_term = true;
 }
 
-void screen_setalign(struct screen *scr, u32 align_x, u32 align_y) {
+EXPORT void screen_setalign(struct screen *scr, u32 align_x, u32 align_y) {
     scr->align_x = align_x;
     scr->align_y = align_y;
 
     scr->should_clear_term = true;
 }
 
-void screen_render(struct screen *scr) {
+EXPORT void screen_render(struct screen *scr) {
     struct terminal_size term_size = screen_terminal_size();
 
     // if the terminal dimension changed, clear the terminal
@@ -158,20 +158,20 @@ void screen_render(struct screen *scr) {
     screen_scrbuffer_flush(scr->buf);
 }
 
-void screen_ignored_char(struct screen *scr, char c) {
+EXPORT void screen_ignored_char(struct screen *scr, char c) {
     scr->ignored_char = c;
 }
 
-void screen_clear(struct screen *scr,
-                  char c, const char *color) {
+EXPORT void screen_clear(struct screen *scr,
+                         char c, const char *color) {
     for(u32 i = 0; i < scr->raster_size; i++) {
         scr->raster[i] = c;
         scr->colors[i] = color;
     }
 }
 
-void screen_setchar(struct screen *scr, u32 x, u32 y,
-                    char c, const char *color) {
+EXPORT void screen_setchar(struct screen *scr, u32 x, u32 y,
+                           char c, const char *color) {
     if(x < 0 || x >= scr->w) return;
     if(y < 0 || y >= scr->h) return;
 
@@ -179,8 +179,8 @@ void screen_setchar(struct screen *scr, u32 x, u32 y,
     scr->colors[x + y * scr->w] = color;
 }
 
-void screen_puts(struct screen *scr, u32 x, u32 y,
-                 const char *str, const char *color) {
+EXPORT void screen_puts(struct screen *scr, u32 x, u32 y,
+                        const char *str, const char *color) {
     u32 len = strlen(str);
 
     u32 xoff = 0;
@@ -200,9 +200,9 @@ void screen_puts(struct screen *scr, u32 x, u32 y,
     }
 }
 
-void screen_printf(struct screen *scr, u32 x, u32 y,
-                   const char *color,
-                   const char *format, ...) {
+EXPORT void screen_printf(struct screen *scr, u32 x, u32 y,
+                          const char *color,
+                          const char *format, ...) {
     va_list args;
     va_start(args, format);
 

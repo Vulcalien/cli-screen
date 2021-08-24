@@ -13,23 +13,11 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-#ifndef VULC_CLISCREEN_TERMINAL_P
-#define VULC_CLISCREEN_TERMINAL_P
+#ifndef VULC_CLISCREEN_SCREEN_P
+#define VULC_CLISCREEN_SCREEN_P
 
-#include "private/privscreen.h"
+#include "screen.h"
 
-struct terminal_size {
-    u32 w;
-    u32 h;
-};
+#define EXPORT __attribute__ ((visibility ("default")))
 
-#ifdef _WIN32
-    #include <windows.h>
-
-    extern HANDLE h_in;
-    extern HANDLE h_out;
-#endif
-
-extern struct terminal_size screen_terminal_size(void);
-
-#endif // VULC_CLISCREEN_TERMINAL_P
+#endif // VULC_CLISCREEN_SCREEN_P

@@ -20,7 +20,7 @@
 static void terminal_prepare_os(void);
 static void terminal_reset_os(void);
 
-void screen_terminal_prepare(void) {
+EXPORT void screen_terminal_prepare(void) {
     // on Windows this enables ANSI codes,
     // so this must be done at the beginning
     terminal_prepare_os();
@@ -31,7 +31,7 @@ void screen_terminal_prepare(void) {
     fflush(stdout);
 }
 
-void screen_terminal_reset(void) {
+EXPORT void screen_terminal_reset(void) {
     // "\033[?25h" - show cursor
     // "\033[m"    - reset color
     fputs("\033[?25h" "\033[m", stdout);
@@ -42,11 +42,11 @@ void screen_terminal_reset(void) {
     terminal_reset_os();
 }
 
-u32 screen_terminal_width(void) {
+EXPORT u32 screen_terminal_width(void) {
     return screen_terminal_size().w;
 }
 
-u32 screen_terminal_height(void) {
+EXPORT u32 screen_terminal_height(void) {
     return screen_terminal_size().h;
 }
 

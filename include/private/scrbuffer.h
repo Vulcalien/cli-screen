@@ -13,10 +13,10 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
-#ifndef VULC_CLISCREEN_PRIV_SCRBUFFER
-#define VULC_CLISCREEN_PRIV_SCRBUFFER
+#ifndef VULC_CLISCREEN_SCRBUFFER_P
+#define VULC_CLISCREEN_SCRBUFFER_P
 
-#include "screen.h"
+#include "private/privscreen.h"
 
 struct scrbuffer {
     u32 size;
@@ -45,4 +45,4 @@ extern void screen_scrbuffer_printf(struct scrbuffer *buf,
 /* Write to the output stream. */
 extern void screen_scrbuffer_flush(struct scrbuffer *buf);
 
-#endif // VULC_CLISCREEN_PRIV_SCRBUFFER
+#endif // VULC_CLISCREEN_SCRBUFFER_P
