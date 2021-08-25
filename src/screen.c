@@ -60,7 +60,7 @@ EXPORT struct screen *screen_create(void) {
 static void screen_free_memory(struct screen *scr) {
     if(scr->raster) free(scr->raster);
     if(scr->colors) free(scr->colors);
-    if(scr->buf)    screen_scrbuffer_destroy(&scr->buf);
+    if(scr->buf)    scrbuffer_destroy(&scr->buf);
 }
 
 EXPORT void screen_destroy(struct screen **scr) {
@@ -83,7 +83,7 @@ EXPORT void screen_setsize(struct screen *scr, u32 w, u32 h) {
     scr->raster = calloc(raster_size, sizeof(char));
     scr->colors = calloc(raster_size, sizeof(const char *));
 
-    scr->buf = screen_scrbuffer_create(raster_size);
+    scr->buf = scrbuffer_create(raster_size);
 
     scr->should_clear_term = true;
 }
@@ -111,7 +111,7 @@ EXPORT void screen_render(struct screen *scr) {
 
         // "\033[H" - move to top left corner
         // "\033[J" - clear (delete from cursor to end of screen)
-        screen_scrbuffer_puts(scr->buf, "\033[H" "\033[J");
+        scrbuffer_puts(scr->buf, "\033[H" "\033[J");
     }
 
     const char *last_color = NULL;
@@ -129,7 +129,7 @@ EXPORT void screen_render(struct screen *scr) {
              * (term_size.h - scr->h);
 
     for(u32 y = 0; y < scr->h; y++) {
-        screen_scrbuffer_printf(scr->buf, "\033[%d;%dH", y0 + y, x0);
+        scrbuffer_printf(scr->buf, "\033[%d;%dH", y0 + y, x0);
 
         for(u32 x = 0; x < scr->w; x++) {
             u32 i = x + y * scr->w;
@@ -140,22 +140,22 @@ EXPORT void screen_render(struct screen *scr) {
             // if color is different, reset and print the new one
             if(col != last_color) {
                 // "\033[m" - reset color
-                screen_scrbuffer_puts(scr->buf, "\033[m");
+                scrbuffer_puts(scr->buf, "\033[m");
                 if(col != NULL) {
-                    screen_scrbuffer_puts(scr->buf, col);
+                    scrbuffer_puts(scr->buf, col);
                 }
 
                 last_color = col;
             }
 
-            screen_scrbuffer_putc(scr->buf, chr);
+            scrbuffer_putc(scr->buf, chr);
         }
     }
     if(last_color != NULL) {
         // "\033[m" - reset color
-        screen_scrbuffer_puts(scr->buf, "\033[m");
+        scrbuffer_puts(scr->buf, "\033[m");
     }
-    screen_scrbuffer_flush(scr->buf);
+    scrbuffer_flush(scr->buf);
 }
 
 EXPORT void screen_ignored_char(struct screen *scr, char c) {

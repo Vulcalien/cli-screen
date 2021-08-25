@@ -27,22 +27,22 @@ struct scrbuffer {
 };
 
 /* Create a screen buffer. */
-extern struct scrbuffer *screen_scrbuffer_create(u32 raster_size);
+extern struct scrbuffer *scrbuffer_create(u32 raster_size);
 
 /* Destroy a screen buffer and set the pointer to NULL. */
-extern void screen_scrbuffer_destroy(struct scrbuffer **buf);
+extern void scrbuffer_destroy(struct scrbuffer **buf);
 
 /* Put a character inside a screen buffer. */
-extern void screen_scrbuffer_putc(struct scrbuffer *buf, char chr);
+extern void scrbuffer_putc(struct scrbuffer *buf, char chr);
 
 /* Put a string inside a screen buffer. */
-extern void screen_scrbuffer_puts(struct scrbuffer *buf, const char *str);
+extern void scrbuffer_puts(struct scrbuffer *buf, const char *str);
 
 /* Put a formatted string with values inside a screen buffer. */
-extern void screen_scrbuffer_printf(struct scrbuffer *buf,
-                                    const char *format, ...);
+extern void scrbuffer_printf(struct scrbuffer *buf,
+                             const char *format, ...);
 
 /* Write to the output stream. */
-extern void screen_scrbuffer_flush(struct scrbuffer *buf);
+extern void scrbuffer_flush(struct scrbuffer *buf);
 
 #endif // VULC_CLISCREEN_SCRBUFFER_P
