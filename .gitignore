@@ -1,6 +1,6 @@
-# VSCode
-/.vscode/
-
 # Binary
 /obj
 /bin
+
+# vim
+*.swp
