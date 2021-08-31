@@ -116,17 +116,31 @@ EXPORT void screen_render(void) {
 
     const char *last_color = NULL;
 
-    // top-left is 1;1 so add 1 to each coordinate
-    u32 x0 = 1
-             + (scr->align_x == SCREEN_ALIGN_X_CENTER)  // if align_x is center
-             * ((term_size.w - scr->w) / 2)
-             + (scr->align_x == SCREEN_ALIGN_X_RIGHT)   // if align_x is right
-             * (term_size.w - scr->w);
-    u32 y0 = 1
-             + (scr->align_y == SCREEN_ALIGN_Y_MIDDLE)  // if align_y is middle
-             * ((term_size.h - scr->h) / 2)
-             + (scr->align_y == SCREEN_ALIGN_Y_BOTTOM)  // if align_y is bottom
-             * (term_size.h - scr->h);
+    u32 x0;
+    switch(scr->align_x) {
+        case SCREEN_ALIGN_X_LEFT:
+            x0 = 1;
+            break;
+        case SCREEN_ALIGN_X_CENTER:
+            x0 = (term_size.w - scr->w) / 2;
+            break;
+        case SCREEN_ALIGN_X_RIGHT:
+            x0 = term_size.w - scr->w;
+            break;
+    }
+
+    u32 y0;
+    switch(scr->align_y) {
+        case SCREEN_ALIGN_Y_TOP:
+            y0 = 1;
+            break;
+        case SCREEN_ALIGN_Y_MIDDLE:
+            y0 = (term_size.h - scr->h) / 2;
+            break;
+        case SCREEN_ALIGN_Y_BOTTOM:
+            y0 = term_size.h - scr->h;
+            break;
+    }
 
     for(u32 y = 0; y < scr->h; y++) {
         scrbuffer_printf(scr->buf, "\033[%d;%dH", y0 + y, x0);
