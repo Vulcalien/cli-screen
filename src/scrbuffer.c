@@ -57,7 +57,7 @@ void scrbuffer_destroy(struct scrbuffer **buf) {
     *buf = NULL;
 }
 
-extern void scrbuffer_putc(struct scrbuffer *buf, char chr) {
+void scrbuffer_putc(struct scrbuffer *buf, char chr) {
     check_buffer(buf, 1);
     buf->chr_buf[buf->used] = chr;
     buf->used++;
@@ -78,7 +78,7 @@ void scrbuffer_printf(struct scrbuffer *buf,
     va_list args;
     va_start(args, format);
 
-    char tmp[PRINTF_TMP_SIZE] = {0};
+    char tmp[PRINTF_TMP_SIZE] = { 0 };
     vsnprintf(tmp, PRINTF_TMP_SIZE, format, args);
 
     va_end(args);

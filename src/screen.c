@@ -47,7 +47,7 @@ static void screen_free_memory(void);
 
 static struct screen *scr = NULL;
 
-static struct terminal_size last_term_size = {.w = 0, .h = 0};
+static struct terminal_size last_term_size = { .w = 0, .h = 0 };
 
 EXPORT void screen_create(void) {
     // calloc sets everything to 0 or (if pointer) NULL
@@ -141,9 +141,8 @@ EXPORT void screen_render(void) {
             if(col != last_color) {
                 // "\033[m" - reset color
                 scrbuffer_puts(scr->buf, "\033[m");
-                if(col != NULL) {
+                if(col != NULL)
                     scrbuffer_puts(scr->buf, col);
-                }
 
                 last_color = col;
             }
@@ -179,7 +178,6 @@ EXPORT void screen_setchar(u32 x, u32 y, char c, const char *color) {
 
 EXPORT void screen_puts(u32 x, u32 y,
                         const char *str, const char *color) {
-    // TODO this seems unnecessary
     u32 len = strlen(str);
 
     u32 xoff = 0;
@@ -191,9 +189,8 @@ EXPORT void screen_puts(u32 x, u32 y,
             xoff = 0;
             yoff++;
         } else {
-            if(c != scr->ignored_char) {
+            if(c != scr->ignored_char)
                 screen_setchar(x + xoff, y + yoff, c, color);
-            }
             xoff++;
         }
     }

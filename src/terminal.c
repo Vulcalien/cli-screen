@@ -75,7 +75,7 @@ EXPORT u32 screen_terminal_height(void) {
     struct terminal_size screen_terminal_size(void) {
         struct winsize ws;
         ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws);
-        return (struct terminal_size) {ws.ws_col, ws.ws_row};
+        return (struct terminal_size) { ws.ws_col, ws.ws_row };
     }
 
 #elif _WIN32
