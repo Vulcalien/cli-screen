@@ -1,15 +1,16 @@
 # Vulcalien's Library Makefile
-# version 0.1.6 (modified)
+# version 0.1.8 (modified)
 #
 # This Makefile can create both
 # Static and Shared libraries
 
-# === TARGET OS ===
+# === DETECT OS ===
 ifeq ($(OS),Windows_NT)
-	TARGET_OS := WINDOWS
+	CURRENT_OS := WINDOWS
 else
-	TARGET_OS := UNIX
+	CURRENT_OS := UNIX
 endif
+TARGET_OS := $(CURRENT_OS)
 
 # ========= EDIT HERE =========
 OUT_FILENAME := libcliscreen
@@ -17,9 +18,6 @@ OUT_FILENAME := libcliscreen
 SRC_DIR := src
 OBJ_DIR := obj
 BIN_DIR := bin
-
-OBJ_STATIC_DIR := $(OBJ_DIR)/static
-OBJ_SHARED_DIR := $(OBJ_DIR)/shared
 
 CPPFLAGS := -Iinclude -MMD -MP
 
@@ -39,35 +37,38 @@ endif
 
 # === OS SPECIFIC ===
 ifeq ($(TARGET_OS),UNIX)
-	# UNIX
 	CC := gcc
 
 	OBJ_EXT    := .o
 	STATIC_EXT := .a
 	SHARED_EXT := .so
-
-	MKDIR      := mkdir
-	MKDIRFLAGS := -p
-
-	RM      := rm
-	RMFLAGS := -rfv
 else ifeq ($(TARGET_OS),WINDOWS)
-	# WINDOWS
 	CC := gcc
 
 	OBJ_EXT    := .obj
 	STATIC_EXT := -win.a
 	SHARED_EXT := .dll
+endif
 
+ifeq ($(CURRENT_OS),UNIX)
+	MKDIR      := mkdir
+	MKDIRFLAGS := -p
+
+	RM      := rm
+	RMFLAGS := -rfv
+else ifeq ($(CURRENT_OS),WINDOWS)
 	MKDIR      := mkdir
 	MKDIRFLAGS :=
 
-	RM      := del
+	RM      := rmdir
 	RMFLAGS := /Q /S
 endif
 
 # === OTHER ===
 SRC := $(wildcard $(SRC_DIR)/*.c)
+
+OBJ_STATIC_DIR := $(OBJ_DIR)/static
+OBJ_SHARED_DIR := $(OBJ_DIR)/shared
 
 OBJ_STATIC := $(SRC:$(SRC_DIR)/%.c=$(OBJ_STATIC_DIR)/%$(OBJ_EXT))
 OBJ_SHARED := $(SRC:$(SRC_DIR)/%.c=$(OBJ_SHARED_DIR)/%$(OBJ_EXT))
@@ -79,9 +80,7 @@ OUT_SHARED := $(BIN_DIR)/$(OUT_FILENAME)$(SHARED_EXT)
 .PHONY: all build-static build-shared clean
 
 all: build-static build-shared
-
 build-static: $(OUT_STATIC)
-
 build-shared: $(OUT_SHARED)
 
 clean:
