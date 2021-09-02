@@ -27,7 +27,7 @@ EXPORT void screen_terminal_prepare(void) {
 
     // "\033[?25l" - hide cursor
     // "\033[2J"   - clear (move content up)
-    fputs("\033[?25l" "\033[2J", stdout); // hide cursor
+    fputs("\033[?25l" "\033[2J", stdout);
     fflush(stdout);
 }
 
@@ -103,7 +103,8 @@ EXPORT u32 screen_terminal_height(void) {
         new_in &= ~ENABLE_LINE_INPUT;
         new_in &= ~ENABLE_ECHO_INPUT;
 
-        new_out |= ENABLE_VIRTUAL_TERMINAL_PROCESSING; // ANSI codes
+        // ANSI codes
+        new_out |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
 
         SetConsoleMode(h_in,  new_in);
         SetConsoleMode(h_out, new_out);
