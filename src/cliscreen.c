@@ -49,12 +49,17 @@ static struct screen *scr = NULL;
 
 static struct terminal_size last_term_size = { .w = 0, .h = 0 };
 
-EXPORT void cliscreen_create(void) {
+EXPORT int cliscreen_create(void) {
     // calloc sets everything to 0 or (if pointer) NULL
     scr = calloc(1, sizeof(struct screen));
 
+    if(!scr)
+        return -1;
+
     scr->align_x = CLISCREEN_ALIGN_X_CENTER;
     scr->align_y = CLISCREEN_ALIGN_Y_MIDDLE;
+
+    return 0;
 }
 
 static void cliscreen_free_memory(void) {

@@ -5,7 +5,7 @@ cliscreen_create, cliscreen_destroy - create/destroy the screen
 .nf
 .B #include \fB"\fPvulcalien/cliscreen.h\fB"\fP
 .PP
-.BI "void cliscreen_create(void);"
+.BI "int  cliscreen_create(void);"
 .BI "void cliscreen_destroy(void);"
 .fi
 .SH DESCRIPTION
@@ -19,7 +19,13 @@ The
 .BR cliscreen_destroy ()
 function destroys the screen, freeing any allocated memory.
 .SH RETURN VALUE
-No value is returned.
+The
+.BR cliscreen_create ()
+function returns 0 on success or nonzero on failure.
+.PP
+The
+.BR cliscreen_destroy ()
+function returns no value.
 .SH SEE ALSO
 .BR cliscreen_setsize (3),
 .BR cliscreen_terminal_prepare (3),

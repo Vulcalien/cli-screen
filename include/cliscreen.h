@@ -29,8 +29,9 @@
 #define CLISCREEN_ALIGN_Y_BOTTOM (2)
 
 /* Create the screen.
- * It must be destroyed by calling cliscreen_destroy. */
-extern void cliscreen_create(void);
+ * It must be destroyed by calling cliscreen_destroy.
+ * Returns 0 on success, a nonzero value otherwise. */
+extern int cliscreen_create(void);
 
 /* Destroy the screen object and free the memory used by it. */
 extern void cliscreen_destroy(void);
