@@ -190,6 +190,18 @@ EXPORT void screen_setchar(u32 x, u32 y, char c, const char *color) {
     scr->colors[x + y * scr->w] = color;
 }
 
+EXPORT void screen_fill(u32 x0, u32 y0, u32 x1, u32 y1,
+                        char c, const char *color) {
+    for(u32 yi = y0; yi <= y1; yi++) {
+        if(yi >= scr->h) break;
+        for(u32 xi = x0; xi <= x1; xi++) {
+            if(xi >= scr->w) break;
+
+            screen_setchar(xi, yi, c, color);
+        }
+    }
+}
+
 EXPORT void screen_puts(u32 x, u32 y,
                         const char *str, const char *color) {
     u32 len = strlen(str);

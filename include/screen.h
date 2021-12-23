@@ -54,6 +54,10 @@ extern void screen_ignored_char(char c);
 extern void screen_clear  (char c, const char *color);
 /* Set a character at the given position in the screen. */
 extern void screen_setchar(u32 x, u32 y, char c, const char *color);
+
+/* Fill from (x0,y0) to (x1,y1) */
+extern void screen_fill(u32 x0, u32 y0, u32 x1, u32 y1, char c, const char *color);
+
 /* Put a string at the given position in the screen. */
 extern void screen_puts   (u32 x, u32 y,
                            const char *str, const char *color);
