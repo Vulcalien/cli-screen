@@ -20,51 +20,52 @@
 
 #include "vulcalien/vulcalien.h"
 
-#define SCREEN_ALIGN_X_LEFT   (0)
-#define SCREEN_ALIGN_X_CENTER (1)
-#define SCREEN_ALIGN_X_RIGHT  (2)
+#define CLISCREEN_ALIGN_X_LEFT   (0)
+#define CLISCREEN_ALIGN_X_CENTER (1)
+#define CLISCREEN_ALIGN_X_RIGHT  (2)
 
-#define SCREEN_ALIGN_Y_TOP    (0)
-#define SCREEN_ALIGN_Y_MIDDLE (1)
-#define SCREEN_ALIGN_Y_BOTTOM (2)
+#define CLISCREEN_ALIGN_Y_TOP    (0)
+#define CLISCREEN_ALIGN_Y_MIDDLE (1)
+#define CLISCREEN_ALIGN_Y_BOTTOM (2)
 
 /* Create the screen.
- * It must be destroyed by calling screen_destroy. */
-extern void screen_create(void);
+ * It must be destroyed by calling cliscreen_destroy. */
+extern void cliscreen_create(void);
 
 /* Destroy the screen object and free the memory used by it. */
-extern void screen_destroy(void);
+extern void cliscreen_destroy(void);
 
 /* Set the screen's size. */
-extern void screen_setsize(u32 w, u32 h);
+extern void cliscreen_setsize(u32 w, u32 h);
 
 /* Set the screen's alignment. */
-extern void screen_setalign(u32 align_x, u32 align_y);
+extern void cliscreen_setalign(u32 align_x, u32 align_y);
 
 /* Draw the screen. */
-extern void screen_render(void);
+extern void cliscreen_render(void);
 
 /* Set the character ignored by the screen.
  * The ignored character is considered transparent,
  * so it is not rendered.
  * Set to '\0' to disable the ignored character. */
-extern void screen_ignored_char(char c);
+extern void cliscreen_ignored_char(char c);
 
 /* Clear the screen. */
-extern void screen_clear  (char c, const char *color);
+extern void cliscreen_clear(char c, const char *color);
 /* Set a character at the given position in the screen. */
-extern void screen_setchar(u32 x, u32 y, char c, const char *color);
+extern void cliscreen_setchar(u32 x, u32 y, char c, const char *color);
 
 /* Fill from (x0,y0) to (x1,y1) */
-extern void screen_fill(u32 x0, u32 y0, u32 x1, u32 y1, char c, const char *color);
+extern void cliscreen_fill(u32 x0, u32 y0, u32 x1, u32 y1,
+                           char c, const char *color);
 
 /* Put a string at the given position in the screen. */
-extern void screen_puts   (u32 x, u32 y,
+extern void cliscreen_puts(u32 x, u32 y,
                            const char *str, const char *color);
 /* Put a formatted string at the given position in the screen. */
-extern void screen_printf (u32 x, u32 y,
-                           const char *color,
-                           const char *format, ...);
+extern void cliscreen_printf(u32 x, u32 y,
+                             const char *color,
+                             const char *format, ...);
 
 //
 // TERMINAL functions
@@ -83,15 +84,15 @@ extern void screen_printf (u32 x, u32 y,
  *     disable 'echo input'
  *     enable  'virtual terminal'
  */
-extern void screen_terminal_prepare(void);
+extern void cliscreen_terminal_prepare(void);
 
-/* Undo screen_terminal_prepare. */
-extern void screen_terminal_reset(void);
+/* Undo cliscreen_terminal_prepare. */
+extern void cliscreen_terminal_reset(void);
 
 /* Return the terminal's current width. */
-extern u32 screen_terminal_width(void);
+extern u32 cliscreen_terminal_width(void);
 
 /* Return the terminal's current height. */
-extern u32 screen_terminal_height(void);
+extern u32 cliscreen_terminal_height(void);
 
 #endif // VULC_CLISCREEN_CORE

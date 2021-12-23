@@ -16,7 +16,7 @@
 #ifndef VULC_CLISCREEN_SCREEN_P
 #define VULC_CLISCREEN_SCREEN_P
 
-#include "screen.h"
+#include "cliscreen.h"
 
 #define EXPORT __attribute__ ((visibility ("default")))
 

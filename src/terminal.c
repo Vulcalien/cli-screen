@@ -20,7 +20,7 @@
 static void terminal_prepare_os(void);
 static void terminal_reset_os(void);
 
-EXPORT void screen_terminal_prepare(void) {
+EXPORT void cliscreen_terminal_prepare(void) {
     // on Windows this enables ANSI codes,
     // so this must be done at the beginning
     terminal_prepare_os();
@@ -31,7 +31,7 @@ EXPORT void screen_terminal_prepare(void) {
     fflush(stdout);
 }
 
-EXPORT void screen_terminal_reset(void) {
+EXPORT void cliscreen_terminal_reset(void) {
     // "\033[?25h" - show cursor
     // "\033[m"    - reset color
     fputs("\033[?25h" "\033[m", stdout);
@@ -42,12 +42,12 @@ EXPORT void screen_terminal_reset(void) {
     terminal_reset_os();
 }
 
-EXPORT u32 screen_terminal_width(void) {
-    return screen_terminal_size().w;
+EXPORT u32 cliscreen_terminal_width(void) {
+    return cliscreen_terminal_size().w;
 }
 
-EXPORT u32 screen_terminal_height(void) {
-    return screen_terminal_size().h;
+EXPORT u32 cliscreen_terminal_height(void) {
+    return cliscreen_terminal_size().h;
 }
 
 #ifdef __unix__
@@ -72,7 +72,7 @@ EXPORT u32 screen_terminal_height(void) {
         tcsetattr(STDIN_FILENO, TCSANOW, &old);
     }
 
-    struct terminal_size screen_terminal_size(void) {
+    struct terminal_size cliscreen_terminal_size(void) {
         struct winsize ws;
         ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws);
         return (struct terminal_size) { ws.ws_col, ws.ws_row };
@@ -115,7 +115,7 @@ EXPORT u32 screen_terminal_height(void) {
         SetConsoleMode(h_out, old_out);
     }
 
-    struct terminal_size screen_terminal_size(void) {
+    struct terminal_size cliscreen_terminal_size(void) {
         CONSOLE_SCREEN_BUFFER_INFO buf_info;
         GetConsoleScreenBufferInfo(h_out, &buf_info);
         return (struct terminal_size) {

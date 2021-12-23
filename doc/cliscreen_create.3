@@ -1,0 +1,26 @@
+.TH SCREEN_CREATE 3 2021-09-14 "libcliscreen 0.?.?" "Manual for libcliscreen"
+.SH NAME
+cliscreen_create, cliscreen_destroy - create/destroy the screen
+.SH SYNOPSIS
+.nf
+.B #include \fB"\fPvulcalien/cliscreen.h\fB"\fP
+.PP
+.BI "void cliscreen_create(void);"
+.BI "void cliscreen_destroy(void);"
+.fi
+.SH DESCRIPTION
+The
+.BR cliscreen_create ()
+function initializes the screen. The raster remains inoperable until
+.BR cliscreen_setsize (3)
+is called.
+.PP
+The
+.BR cliscreen_destroy ()
+function destroys the screen, freeing any allocated memory.
+.SH RETURN VALUE
+No value is returned.
+.SH SEE ALSO
+.BR cliscreen_setsize (3),
+.BR cliscreen_terminal_prepare (3),
+.BR cliscreen_terminal_reset (3)

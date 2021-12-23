@@ -30,6 +30,6 @@ struct terminal_size {
     extern HANDLE h_out;
 #endif
 
-extern struct terminal_size screen_terminal_size(void);
+extern struct terminal_size cliscreen_terminal_size(void);
 
 #endif // VULC_CLISCREEN_TERMINAL_P

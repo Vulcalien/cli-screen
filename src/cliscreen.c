@@ -13,7 +13,7 @@
  * License along with this library.
  * If not, see <https://www.gnu.org/licenses/>.
  */
-#include "screen.h"
+#include "cliscreen.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -43,35 +43,35 @@ struct screen {
     bool should_clear_term;
 };
 
-static void screen_free_memory(void);
+static void cliscreen_free_memory(void);
 
 static struct screen *scr = NULL;
 
 static struct terminal_size last_term_size = { .w = 0, .h = 0 };
 
-EXPORT void screen_create(void) {
+EXPORT void cliscreen_create(void) {
     // calloc sets everything to 0 or (if pointer) NULL
     scr = calloc(1, sizeof(struct screen));
 
-    scr->align_x = SCREEN_ALIGN_X_CENTER;
-    scr->align_y = SCREEN_ALIGN_Y_MIDDLE;
+    scr->align_x = CLISCREEN_ALIGN_X_CENTER;
+    scr->align_y = CLISCREEN_ALIGN_Y_MIDDLE;
 }
 
-static void screen_free_memory(void) {
+static void cliscreen_free_memory(void) {
     if(scr->raster) free(scr->raster);
     if(scr->colors) free(scr->colors);
     if(scr->buf)    scrbuffer_destroy(&scr->buf);
 }
 
-EXPORT void screen_destroy(void) {
+EXPORT void cliscreen_destroy(void) {
     if(scr) {
-        screen_free_memory();
+        cliscreen_free_memory();
         free(scr);
     }
 }
 
-EXPORT void screen_setsize(u32 w, u32 h) {
-    screen_free_memory();
+EXPORT void cliscreen_setsize(u32 w, u32 h) {
+    cliscreen_free_memory();
 
     u32 raster_size = w * h;
 
@@ -88,15 +88,15 @@ EXPORT void screen_setsize(u32 w, u32 h) {
     scr->should_clear_term = true;
 }
 
-EXPORT void screen_setalign(u32 align_x, u32 align_y) {
+EXPORT void cliscreen_setalign(u32 align_x, u32 align_y) {
     scr->align_x = align_x;
     scr->align_y = align_y;
 
     scr->should_clear_term = true;
 }
 
-EXPORT void screen_render(void) {
-    struct terminal_size term_size = screen_terminal_size();
+EXPORT void cliscreen_render(void) {
+    struct terminal_size term_size = cliscreen_terminal_size();
 
     // if the terminal dimension changed, clear the terminal
     if(term_size.w != last_term_size.w
@@ -118,26 +118,26 @@ EXPORT void screen_render(void) {
 
     u32 x0;
     switch(scr->align_x) {
-        case SCREEN_ALIGN_X_LEFT:
+        case CLISCREEN_ALIGN_X_LEFT:
             x0 = 1;
             break;
-        case SCREEN_ALIGN_X_CENTER:
+        case CLISCREEN_ALIGN_X_CENTER:
             x0 = (term_size.w - scr->w) / 2;
             break;
-        case SCREEN_ALIGN_X_RIGHT:
+        case CLISCREEN_ALIGN_X_RIGHT:
             x0 = term_size.w - scr->w;
             break;
     }
 
     u32 y0;
     switch(scr->align_y) {
-        case SCREEN_ALIGN_Y_TOP:
+        case CLISCREEN_ALIGN_Y_TOP:
             y0 = 1;
             break;
-        case SCREEN_ALIGN_Y_MIDDLE:
+        case CLISCREEN_ALIGN_Y_MIDDLE:
             y0 = (term_size.h - scr->h) / 2;
             break;
-        case SCREEN_ALIGN_Y_BOTTOM:
+        case CLISCREEN_ALIGN_Y_BOTTOM:
             y0 = term_size.h - scr->h;
             break;
     }
@@ -171,18 +171,18 @@ EXPORT void screen_render(void) {
     scrbuffer_flush(scr->buf);
 }
 
-EXPORT void screen_ignored_char(char c) {
+EXPORT void cliscreen_ignored_char(char c) {
     scr->ignored_char = c;
 }
 
-EXPORT void screen_clear(char c, const char *color) {
+EXPORT void cliscreen_clear(char c, const char *color) {
     for(u32 i = 0; i < scr->raster_size; i++) {
         scr->raster[i] = c;
         scr->colors[i] = color;
     }
 }
 
-EXPORT void screen_setchar(u32 x, u32 y, char c, const char *color) {
+EXPORT void cliscreen_setchar(u32 x, u32 y, char c, const char *color) {
     if(x >= scr->w) return;
     if(y >= scr->h) return;
 
@@ -190,20 +190,20 @@ EXPORT void screen_setchar(u32 x, u32 y, char c, const char *color) {
     scr->colors[x + y * scr->w] = color;
 }
 
-EXPORT void screen_fill(u32 x0, u32 y0, u32 x1, u32 y1,
-                        char c, const char *color) {
+EXPORT void cliscreen_fill(u32 x0, u32 y0, u32 x1, u32 y1,
+                           char c, const char *color) {
     for(u32 yi = y0; yi <= y1; yi++) {
         if(yi >= scr->h) break;
         for(u32 xi = x0; xi <= x1; xi++) {
             if(xi >= scr->w) break;
 
-            screen_setchar(xi, yi, c, color);
+            cliscreen_setchar(xi, yi, c, color);
         }
     }
 }
 
-EXPORT void screen_puts(u32 x, u32 y,
-                        const char *str, const char *color) {
+EXPORT void cliscreen_puts(u32 x, u32 y,
+                           const char *str, const char *color) {
     u32 len = strlen(str);
 
     u32 xoff = 0;
@@ -216,15 +216,15 @@ EXPORT void screen_puts(u32 x, u32 y,
             yoff++;
         } else {
             if(c != scr->ignored_char)
-                screen_setchar(x + xoff, y + yoff, c, color);
+                cliscreen_setchar(x + xoff, y + yoff, c, color);
             xoff++;
         }
     }
 }
 
-EXPORT void screen_printf(u32 x, u32 y,
-                          const char *color,
-                          const char *format, ...) {
+EXPORT void cliscreen_printf(u32 x, u32 y,
+                             const char *color,
+                             const char *format, ...) {
     va_list args;
     va_start(args, format);
 
@@ -233,5 +233,5 @@ EXPORT void screen_printf(u32 x, u32 y,
 
     va_end(args);
 
-    screen_puts(x, y, tmp, color);
+    cliscreen_puts(x, y, tmp, color);
 }
