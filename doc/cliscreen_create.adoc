@@ -1,0 +1,34 @@
+= cliscreen_create(3)
+:doctype: manpage
+:man source: libcliscreen 0.?.?
+:man manual: Manual for libcliscreen
+:doc date: 2023-03-28
+
+== NAME
+cliscreen_create, cliscreen_destroy - create/destroy the screen
+
+== SYNOPSIS
+[verse]
+____
+*#include "vulcalien/cliscreen.h"*
+
+*int cliscreen_create(void);*
+*void cliscreen_destroy(void);*
+____
+
+== DESCRIPTION
+The *cliscreen_create*() function initializes the screen. The raster remains
+inoperable until *cliscreen_setsize*(3) is called.
+
+The *cliscreen_destroy*() function destroys the screen, freeing any allocated
+memory.
+
+== RETURN VALUE
+The *cliscreen_create*() function returns 0 on success or nonzero on failure.
+
+The *cliscreen_destroy*() function returns no value.
+
+== SEE ALSO
+*cliscreen_setsize*(3),
+*cliscreen_terminal_prepare*(3),
+*cliscreen_terminal_reset*(3)

@@ -1,0 +1,25 @@
+= cliscreen_setsize(3)
+:doctype: manpage
+:man source: libcliscreen 0.?.?
+:man manual: Manual for libcliscreen
+:doc date: 2023-03-28
+
+== NAME
+cliscreen_setsize - set the screen's size
+
+== SYNOPSIS
+[verse]
+____
+*#include "vulcalien/cliscreen.h"*
+
+**void cliscreen_setsize(u32 **__w__**, u32 **__h__**);**
+____
+
+== DESCRIPTION
+The *cliscreen_setsize*() function sets the size of the screen.
+
+== RETURN VALUE
+No value is returned.
+
+== SEE ALSO
+*cliscreen_create*(3), *cliscreen_setalign*(3)
