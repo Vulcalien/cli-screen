@@ -1,8 +1,8 @@
 = cliscreen_create(3)
 :doctype: manpage
-:man source: libcliscreen 0.?.?
-:man manual: Manual for libcliscreen
-:doc date: 2023-03-28
+:manmanual: Manual for libcliscreen
+:mansource: libcliscreen
+:manversion: 0.?.?
 
 == NAME
 cliscreen_create, cliscreen_destroy - create/destroy the screen
