@@ -1,4 +1,4 @@
-/* Copyright 2021 Vulcalien
+/* Copyright 2021-2023 Vulcalien
  *
  * This library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -30,15 +30,15 @@
 #define PRINTF_TMP_SIZE (256)
 
 /* Check if the buffer has enought space. If not, expand it. */
-static void check_buffer(struct scrbuffer *buf, u32 requested_space);
+static void check_buffer(struct scrbuffer *buf, int requested_space);
 
-struct scrbuffer *scrbuffer_create(u32 raster_size) {
+struct scrbuffer *scrbuffer_create(int raster_size) {
     struct scrbuffer *buf = malloc(sizeof(struct scrbuffer));
 
     /* since there will be ANSI codes in the buffer, other
      * than the characters in the raster, 1 * raster_size is
      * surely not enought */
-    u32 initial_size = 2 * raster_size;
+    int initial_size = 2 * raster_size;
 
     *buf = (struct scrbuffer) {
         .size = initial_size,
@@ -64,12 +64,11 @@ void scrbuffer_putc(struct scrbuffer *buf, char chr) {
 }
 
 void scrbuffer_puts(struct scrbuffer *buf, const char *str) {
-    u32 len = strlen(str);
+    int len = strlen(str);
 
     check_buffer(buf, len);
-    for(u32 i = 0; i < len; i++) {
+    for(int i = 0; i < len; i++)
         buf->chr_buf[buf->used + i] = str[i];
-    }
     buf->used += len;
 }
 
@@ -97,7 +96,8 @@ void scrbuffer_flush(struct scrbuffer *buf) {
     buf->used = 0;
 }
 
-static void check_buffer(struct scrbuffer *buf, u32 requested_space) {
+// FIXME Am I seriously reallocating every time a character is written?
+static void check_buffer(struct scrbuffer *buf, int requested_space) {
     // I could write some complex code that uses an 'if' and math, but
     // since the buffer should expand rarely, this 'while' is acceptable
     while(buf->used + requested_space > buf->size) {

@@ -1,4 +1,4 @@
-/* Copyright 2021 Vulcalien
+/* Copyright 2021-2023 Vulcalien
  *
  * This library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -42,11 +42,11 @@ EXPORT void cliscreen_terminal_reset(void) {
     terminal_reset_os();
 }
 
-EXPORT u32 cliscreen_terminal_width(void) {
+EXPORT int cliscreen_terminal_width(void) {
     return cliscreen_terminal_size().w;
 }
 
-EXPORT u32 cliscreen_terminal_height(void) {
+EXPORT int cliscreen_terminal_height(void) {
     return cliscreen_terminal_size().h;
 }
 

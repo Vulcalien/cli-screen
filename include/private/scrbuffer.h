@@ -1,4 +1,4 @@
-/* Copyright 2021 Vulcalien
+/* Copyright 2021-2023 Vulcalien
  *
  * This library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -19,15 +19,15 @@
 #include "private/privscreen.h"
 
 struct scrbuffer {
-    u32 size;
-    u32 used;
+    int size;
+    int used;
     char *chr_buf;
 
-    u32 inc_step;
+    int inc_step;
 };
 
 /* Create a screen buffer. */
-extern struct scrbuffer *scrbuffer_create(u32 raster_size);
+extern struct scrbuffer *scrbuffer_create(int raster_size);
 
 /* Destroy a screen buffer and set the pointer to NULL. */
 extern void scrbuffer_destroy(struct scrbuffer **buf);

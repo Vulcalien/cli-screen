@@ -1,4 +1,4 @@
-/* Copyright 2021 Vulcalien
+/* Copyright 2021-2023 Vulcalien
  *
  * This library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -17,6 +17,8 @@
 #define VULC_CLISCREEN_SCREEN_P
 
 #include "cliscreen.h"
+
+#include <stdbool.h>
 
 #define EXPORT __attribute__ ((visibility ("default")))
 

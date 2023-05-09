@@ -1,4 +1,4 @@
-/* Copyright 2021 Vulcalien
+/* Copyright 2021-2023 Vulcalien
  *
  * This library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -13,12 +13,10 @@
  * License along with this library.
  * If not, see <https://www.gnu.org/licenses/>.
  *
- * version: 0.4.1-WIP
+ * version: 0.5.0-WIP
  */
 #ifndef VULC_CLISCREEN_CORE
 #define VULC_CLISCREEN_CORE
-
-#include "vulcalien/vulcalien.h"
 
 #define CLISCREEN_ALIGN_X_LEFT   (0)
 #define CLISCREEN_ALIGN_X_CENTER (1)
@@ -37,10 +35,10 @@ extern int cliscreen_create(void);
 extern void cliscreen_destroy(void);
 
 /* Set the screen's size. */
-extern void cliscreen_setsize(u32 w, u32 h);
+extern void cliscreen_setsize(int w, int h);
 
 /* Set the screen's alignment. */
-extern void cliscreen_setalign(u32 align_x, u32 align_y);
+extern void cliscreen_setalign(int align_x, int align_y);
 
 /* Draw the screen. */
 extern void cliscreen_render(void);
@@ -54,17 +52,17 @@ extern void cliscreen_ignored_char(char c);
 /* Clear the screen. */
 extern void cliscreen_clear(char c, const char *color);
 /* Set a character at the given position in the screen. */
-extern void cliscreen_setchar(u32 x, u32 y, char c, const char *color);
+extern void cliscreen_setchar(int x, int y, char c, const char *color);
 
 /* Fill from (x0,y0) to (x1,y1) */
-extern void cliscreen_fill(u32 x0, u32 y0, u32 x1, u32 y1,
+extern void cliscreen_fill(int x0, int y0, int x1, int y1,
                            char c, const char *color);
 
 /* Put a string at the given position in the screen. */
-extern void cliscreen_puts(u32 x, u32 y,
+extern void cliscreen_puts(int x, int y,
                            const char *str, const char *color);
 /* Put a formatted string at the given position in the screen. */
-extern void cliscreen_printf(u32 x, u32 y,
+extern void cliscreen_printf(int x, int y,
                              const char *color,
                              const char *format, ...);
 
@@ -91,9 +89,9 @@ extern void cliscreen_terminal_prepare(void);
 extern void cliscreen_terminal_reset(void);
 
 /* Return the terminal's current width. */
-extern u32 cliscreen_terminal_width(void);
+extern int cliscreen_terminal_width(void);
 
 /* Return the terminal's current height. */
-extern u32 cliscreen_terminal_height(void);
+extern int cliscreen_terminal_height(void);
 
 #endif // VULC_CLISCREEN_CORE

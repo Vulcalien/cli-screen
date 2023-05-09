@@ -1,4 +1,4 @@
-/* Copyright 2021 Vulcalien
+/* Copyright 2021-2023 Vulcalien
  *
  * This library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -26,13 +26,13 @@
 #define PRINTF_TMP_SIZE (256)
 
 struct screen {
-    u32 w;
-    u32 h;
+    int w;
+    int h;
 
-    u32 raster_size;
+    int raster_size;
 
-    u32 align_x;
-    u32 align_y;
+    int align_x;
+    int align_y;
 
     char *raster;
     const char **colors;
@@ -75,10 +75,10 @@ EXPORT void cliscreen_destroy(void) {
     }
 }
 
-EXPORT void cliscreen_setsize(u32 w, u32 h) {
+EXPORT void cliscreen_setsize(int w, int h) {
     cliscreen_free_memory();
 
-    u32 raster_size = w * h;
+    int raster_size = w * h;
 
     scr->w = w;
     scr->h = h;
@@ -93,7 +93,7 @@ EXPORT void cliscreen_setsize(u32 w, u32 h) {
     scr->should_clear_term = true;
 }
 
-EXPORT void cliscreen_setalign(u32 align_x, u32 align_y) {
+EXPORT void cliscreen_setalign(int align_x, int align_y) {
     scr->align_x = align_x;
     scr->align_y = align_y;
 
@@ -121,7 +121,7 @@ EXPORT void cliscreen_render(void) {
 
     const char *last_color = NULL;
 
-    u32 x0;
+    int x0;
     switch(scr->align_x) {
         case CLISCREEN_ALIGN_X_LEFT:
             x0 = 1;
@@ -134,7 +134,7 @@ EXPORT void cliscreen_render(void) {
             break;
     }
 
-    u32 y0;
+    int y0;
     switch(scr->align_y) {
         case CLISCREEN_ALIGN_Y_TOP:
             y0 = 1;
@@ -147,11 +147,11 @@ EXPORT void cliscreen_render(void) {
             break;
     }
 
-    for(u32 y = 0; y < scr->h; y++) {
+    for(int y = 0; y < scr->h; y++) {
         scrbuffer_printf(scr->buf, "\033[%d;%dH", y0 + y, x0);
 
-        for(u32 x = 0; x < scr->w; x++) {
-            u32 i = x + y * scr->w;
+        for(int x = 0; x < scr->w; x++) {
+            int i = x + y * scr->w;
 
             char chr = scr->raster[i];
             const char *col = scr->colors[i];
@@ -181,13 +181,13 @@ EXPORT void cliscreen_ignored_char(char c) {
 }
 
 EXPORT void cliscreen_clear(char c, const char *color) {
-    for(u32 i = 0; i < scr->raster_size; i++) {
+    for(int i = 0; i < scr->raster_size; i++) {
         scr->raster[i] = c;
         scr->colors[i] = color;
     }
 }
 
-EXPORT void cliscreen_setchar(u32 x, u32 y, char c, const char *color) {
+EXPORT void cliscreen_setchar(int x, int y, char c, const char *color) {
     if(x >= scr->w) return;
     if(y >= scr->h) return;
 
@@ -195,11 +195,11 @@ EXPORT void cliscreen_setchar(u32 x, u32 y, char c, const char *color) {
     scr->colors[x + y * scr->w] = color;
 }
 
-EXPORT void cliscreen_fill(u32 x0, u32 y0, u32 x1, u32 y1,
+EXPORT void cliscreen_fill(int x0, int y0, int x1, int y1,
                            char c, const char *color) {
-    for(u32 yi = y0; yi <= y1; yi++) {
+    for(int yi = y0; yi <= y1; yi++) {
         if(yi >= scr->h) break;
-        for(u32 xi = x0; xi <= x1; xi++) {
+        for(int xi = x0; xi <= x1; xi++) {
             if(xi >= scr->w) break;
 
             cliscreen_setchar(xi, yi, c, color);
@@ -207,13 +207,13 @@ EXPORT void cliscreen_fill(u32 x0, u32 y0, u32 x1, u32 y1,
     }
 }
 
-EXPORT void cliscreen_puts(u32 x, u32 y,
+EXPORT void cliscreen_puts(int x, int y,
                            const char *str, const char *color) {
-    u32 len = strlen(str);
+    int len = strlen(str);
 
-    u32 xoff = 0;
-    u32 yoff = 0;
-    for(u32 i = 0; i < len; i++) {
+    int xoff = 0;
+    int yoff = 0;
+    for(int i = 0; i < len; i++) {
         char c = str[i];
 
         if(c == '\n') {
@@ -227,7 +227,7 @@ EXPORT void cliscreen_puts(u32 x, u32 y,
     }
 }
 
-EXPORT void cliscreen_printf(u32 x, u32 y,
+EXPORT void cliscreen_printf(int x, int y,
                              const char *color,
                              const char *format, ...) {
     va_list args;

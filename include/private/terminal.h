@@ -1,4 +1,4 @@
-/* Copyright 2021 Vulcalien
+/* Copyright 2021-2023 Vulcalien
  *
  * This library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -19,8 +19,8 @@
 #include "private/privscreen.h"
 
 struct terminal_size {
-    u32 w;
-    u32 h;
+    int w;
+    int h;
 };
 
 #ifdef _WIN32
