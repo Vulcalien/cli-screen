@@ -188,8 +188,8 @@ EXPORT void cliscreen_clear(char c, const char *color) {
 }
 
 EXPORT void cliscreen_setchar(int x, int y, char c, const char *color) {
-    if(x >= scr->w) return;
-    if(y >= scr->h) return;
+    if(x < 0 || x >= scr->w) return;
+    if(y < 0 || y >= scr->h) return;
 
     scr->raster[x + y * scr->w] = c;
     scr->colors[x + y * scr->w] = color;
@@ -198,9 +198,9 @@ EXPORT void cliscreen_setchar(int x, int y, char c, const char *color) {
 EXPORT void cliscreen_fill(int x0, int y0, int x1, int y1,
                            char c, const char *color) {
     for(int yi = y0; yi <= y1; yi++) {
-        if(yi >= scr->h) break;
+        if(yi < 0 || yi >= scr->h) break;
         for(int xi = x0; xi <= x1; xi++) {
-            if(xi >= scr->w) break;
+            if(xi < 0 || xi >= scr->w) break;
 
             cliscreen_setchar(xi, yi, c, color);
         }
