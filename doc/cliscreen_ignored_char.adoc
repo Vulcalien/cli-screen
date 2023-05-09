@@ -1,0 +1,40 @@
+= cliscreen_ignored_char(3)
+:doctype: manpage
+:manmanual: Manual for libcliscreen
+:mansource: libcliscreen
+:manversion: 0.?.?
+
+== NAME
+cliscreen_ignored_char - set the ignored character
+
+== SYNOPSIS
+[verse]
+____
+*#include "vulcalien/cliscreen.h"*
+
+**void cliscreen_ignored_char(char **__c__**);**
+____
+
+== DESCRIPTION
+The *cliscreen_ignored_char*() function sets the character that should
+be ignored. When writing a string using *cliscreen_puts*(3) or
+*cliscreen_printf*(3), the ignored character will not overwrite other
+characters. The ignored character can be considered 'transparent'.
+
+If _status_ is set to '\0', no character will be ignored after the
+function is called.
+
+Note: the functions *cliscreen_clear*(3), *cliscreen_setchar*(3) and
+*cliscreen_fill*(3) are not affected.
+
+== RETURN VALUE
+No value is returned.
+
+== EXAMPLE
+The output of this code is "Hello -abc-!":
+----
+cliscreen_ignored_char('#');
+
+cliscreen_puts(0, 0, "Hello World!", NULL);
+cliscreen_puts(0, 0, "######-abc-#", NULL);
+----

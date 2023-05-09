@@ -1,0 +1,39 @@
+= cliscreen_clear(3)
+:doctype: manpage
+:manmanual: Manual for libcliscreen
+:mansource: libcliscreen
+:manversion: 0.?.?
+
+== NAME
+cliscreen_clear - clear the screen with one character
+
+== SYNOPSIS
+[verse]
+____
+*#include "vulcalien/cliscreen.h"*
+
+**void cliscreen_clear(char **__c__**, const char +++*+++**__color__**);**
+____
+
+== DESCRIPTION
+The *cliscreen_clear*() function fills the screen with the _c_ character
+and the color specified in _color_.
+
+_color_ can be either the ANSI escape code representing a color, or
+NULL. If _color_ is NULL, the character will have the default color.
+Note: the string pointed by _color_ is NOT copied, so the string must be
+a literal string or a global variable.
+
+== RETURN VALUE
+No value is returned.
+
+== EXAMPLE
+This clears the screen with the ' ' (space) character, with the default
+color:
+----
+cliscreen_clear(' ', NULL);
+----
+
+== SEE ALSO
+*cliscreen_setchar*(3),
+*cliscreen_fill*(3)

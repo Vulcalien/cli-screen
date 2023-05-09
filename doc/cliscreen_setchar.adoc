@@ -1,0 +1,42 @@
+= cliscreen_create(3)
+:doctype: manpage
+:manmanual: Manual for libcliscreen
+:mansource: libcliscreen
+:manversion: 0.?.?
+
+== NAME
+cliscreen_setchar - set a single character
+
+== SYNOPSIS
+[verse]
+____
+*#include "vulcalien/cliscreen.h"*
+
+**void cliscreen_setchar(u32 **__x__**, u32 **__y__**, char **__c__**, const char +++*+++**__color__**);**
+____
+
+== DESCRIPTION
+The *cliscreen_setchar*() function overwrites a single character at the
+position (_x_, _y_) of the screen with the character _c_ and the color
+specified in _color_. If (_x_, _y_) is outside of the screen bounds, the
+function does nothing.
+
+_color_ can be either the ANSI escape code representing a color, or
+NULL. If _color_ is NULL, the character will have the default color.
+Note: the string pointed by _color_ is NOT copied, so the string must be
+a literal string or a global variable.
+
+== RETURN VALUE
+No value is returned.
+
+== EXAMPLE
+This writes '@', with the default color, at (1, 2):
+----
+cliscreen_setchar(1, 2, '@', NULL);
+----
+
+== SEE ALSO
+*cliscreen_clear*(3),
+*cliscreen_fill*(3),
+*cliscreen_puts*(3),
+*cliscreen_printf*(3)

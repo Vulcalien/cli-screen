@@ -1,0 +1,24 @@
+= cliscreen_render(3)
+:doctype: manpage
+:manmanual: Manual for libcliscreen
+:mansource: libcliscreen
+:manversion: 0.?.?
+
+== NAME
+cliscreen_render - draw the screen to the terminal
+
+== SYNOPSIS
+[verse]
+____
+*#include "vulcalien/cliscreen.h"*
+
+*void cliscreen_render(void);*
+____
+
+== DESCRIPTION
+The *cliscreen_render*() function writes the screen buffer to the
+terminal. If necessary (e.g. when the terminal has been resized), it
+will first clear the terminal.
+
+== RETURN VALUE
+No value is returned.
