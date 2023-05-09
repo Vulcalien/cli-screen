@@ -10,7 +10,7 @@ cliscreen_render - draw the screen to the terminal
 == SYNOPSIS
 [verse]
 ____
-*#include "vulcalien/cliscreen.h"*
+*#include <cliscreen.h>*
 
 *void cliscreen_render(void);*
 ____

@@ -10,7 +10,7 @@ cliscreen_ignored_char - set the ignored character
 == SYNOPSIS
 [verse]
 ____
-*#include "vulcalien/cliscreen.h"*
+*#include <cliscreen.h>*
 
 **void cliscreen_ignored_char(char **__c__**);**
 ____

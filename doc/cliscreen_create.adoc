@@ -10,7 +10,7 @@ cliscreen_create, cliscreen_destroy - create/destroy the screen
 == SYNOPSIS
 [verse]
 ____
-*#include "vulcalien/cliscreen.h"*
+*#include <cliscreen.h>*
 
 *int cliscreen_create(void);*
 *void cliscreen_destroy(void);*

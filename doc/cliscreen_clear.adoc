@@ -10,7 +10,7 @@ cliscreen_clear - clear the screen with one character
 == SYNOPSIS
 [verse]
 ____
-*#include "vulcalien/cliscreen.h"*
+*#include <cliscreen.h>*
 
 **void cliscreen_clear(char **__c__**, const char +++*+++**__color__**);**
 ____

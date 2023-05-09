@@ -10,9 +10,9 @@ cliscreen_setchar - set a single character
 == SYNOPSIS
 [verse]
 ____
-*#include "vulcalien/cliscreen.h"*
+*#include <cliscreen.h>*
 
-**void cliscreen_setchar(u32 **__x__**, u32 **__y__**, char **__c__**, const char +++*+++**__color__**);**
+**void cliscreen_setchar(int **__x__**, int **__y__**, char **__c__**, const char +++*+++**__color__**);**
 ____
 
 == DESCRIPTION

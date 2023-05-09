@@ -10,9 +10,9 @@ cliscreen_setsize - set the screen's size
 == SYNOPSIS
 [verse]
 ____
-*#include "vulcalien/cliscreen.h"*
+*#include <cliscreen.h>*
 
-**void cliscreen_setsize(u32 **__w__**, u32 **__h__**);**
+**void cliscreen_setsize(int **__w__**, int **__h__**);**
 ____
 
 == DESCRIPTION
