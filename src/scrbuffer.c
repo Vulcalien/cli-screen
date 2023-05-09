@@ -30,7 +30,14 @@
 #define PRINTF_TMP_SIZE (256)
 
 /* Check if the buffer has enought space. If not, expand it. */
-static void check_buffer(struct scrbuffer *buf, int requested_space);
+static void check_buffer(struct scrbuffer *buf, int requested_space) {
+    if(buf->used + requested_space > buf->size) {
+        int missing = buf->used + requested_space - buf->size;
+
+        buf->size += buf->inc_step * ((missing / buf->inc_step) + 1);
+        buf->chr_buf = realloc(buf->chr_buf, buf->size * sizeof(char));
+    }
+}
 
 struct scrbuffer *scrbuffer_create(int raster_size) {
     struct scrbuffer *buf = malloc(sizeof(struct scrbuffer));
@@ -94,14 +101,4 @@ void scrbuffer_flush(struct scrbuffer *buf) {
     #endif
 
     buf->used = 0;
-}
-
-// FIXME Am I seriously reallocating every time a character is written?
-static void check_buffer(struct scrbuffer *buf, int requested_space) {
-    // I could write some complex code that uses an 'if' and math, but
-    // since the buffer should expand rarely, this 'while' is acceptable
-    while(buf->used + requested_space > buf->size) {
-        buf->size += buf->inc_step;
-    }
-    buf->chr_buf = realloc(buf->chr_buf, buf->size * sizeof(char));
 }
