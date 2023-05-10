@@ -17,7 +17,7 @@ ____
 
 == DESCRIPTION
 The *cliscreen_clear*() function fills the screen with the _c_ character
-and the color specified in _color_.
+and the color specified by _color_.
 
 _color_ can be either the ANSI escape code representing a color, or
 NULL. If _color_ is NULL, the character will have the default color.

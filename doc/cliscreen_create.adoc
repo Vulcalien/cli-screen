@@ -17,14 +17,16 @@ ____
 ____
 
 == DESCRIPTION
-The *cliscreen_create*() function initializes the screen. The raster remains
-inoperable until *cliscreen_setsize*(3) is called.
+The *cliscreen_create*() function initializes the screen. The raster
+remains inoperable until *cliscreen_setsize*(3) is called.
 
-The *cliscreen_destroy*() function destroys the screen, freeing any allocated
-memory.
+The *cliscreen_destroy*() function destroys the screen, freeing any
+allocated memory. If the screen is uninitialized or has already been
+destroyed, the function does nothing.
 
 == RETURN VALUE
-The *cliscreen_create*() function returns 0 on success or nonzero on failure.
+The *cliscreen_create*() function returns 0 on success or nonzero on
+failure.
 
 The *cliscreen_destroy*() function returns no value.
 

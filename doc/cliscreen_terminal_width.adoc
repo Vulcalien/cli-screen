@@ -1,0 +1,47 @@
+= cliscreen_terminal_width(3)
+:doctype: manpage
+:manmanual: Manual for libcliscreen
+:mansource: libcliscreen
+:manversion: 0.?.?
+
+== NAME
+cliscreen_terminal_width, cliscreen_terminal_height - get the terminal's
+current width/height
+
+== SYNOPSIS
+[verse]
+____
+*#include <cliscreen.h>*
+
+*int cliscreen_terminal_width(void);*
+*int cliscreen_terminal_height(void);*
+____
+
+== DESCRIPTION
+The *cliscreen_terminal_width*() and *cliscreen_terminal_height*()
+functions return, respectively, the current width and height of the
+terminal. The size returned is in character units.
+
+These functions can be used to update the screen's size when the
+terminal is resized (see *cliscreen_setsize*(3)).
+
+== RETURN VALUE
+The *cliscreen_terminal_width*() functions return the terminal's current
+width.
+
+The *cliscreen_terminal_height*() functions return the terminal's
+current height.
+
+== EXAMPLE
+This resizes the screen to half of the terminal's size, and then clears
+the screen with the '#' character and the default color:
+----
+int width  = cliscreen_terminal_width();
+int height = cliscreen_terminal_height();
+cliscreen_setsize(width / 2, height / 2);
+
+cliscreen_clear('#', NULL);
+----
+
+== SEE ALSO
+*cliscreen_setsize*(3)

@@ -16,10 +16,13 @@ ____
 ____
 
 == DESCRIPTION
-The *cliscreen_setsize*() function sets the size of the screen.
+The *cliscreen_setsize*() function sets the size of the screen. After
+resizing, the raster is reinitialized and all of its contents are lost.
 
 == RETURN VALUE
 No value is returned.
 
 == SEE ALSO
-*cliscreen_create*(3), *cliscreen_setalign*(3)
+*cliscreen_create*(3),
+*cliscreen_setalign*(3),
+*cliscreen_terminal_width*(3)

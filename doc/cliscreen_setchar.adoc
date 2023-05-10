@@ -18,7 +18,7 @@ ____
 == DESCRIPTION
 The *cliscreen_setchar*() function overwrites a single character at the
 position (_x_, _y_) of the screen with the character _c_ and the color
-specified in _color_. If (_x_, _y_) is outside of the screen bounds, the
+specified by _color_. If (_x_, _y_) is outside of the screen bounds, the
 function does nothing.
 
 _color_ can be either the ANSI escape code representing a color, or

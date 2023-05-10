@@ -1,0 +1,46 @@
+= cliscreen_fill(3)
+:doctype: manpage
+:manmanual: Manual for libcliscreen
+:mansource: libcliscreen
+:manversion: 0.?.?
+
+== NAME
+cliscreen_fill - fill a rectangular area of the screen
+
+== SYNOPSIS
+[verse]
+____
+*#include <cliscreen.h>*
+
+**void cliscreen_fill(int **__x0__**, int **__y0__**, int **__x1__**, int **__y1__**,**
+                    **char **__c__**, const char +++*+++**__color__**);**
+____
+
+== DESCRIPTION
+The *cliscreen_fill*() function fills the rectangular area from
+(_x0_, _y0_) to (_x1_, _y1_) of the screen with the character _c_ and
+the color specified by _color_.
+
+If some part of the area is outside of the screen bounds, that part will
+be ignored.
+
+_color_ can be either the ANSI escape code representing a color, or
+NULL. If _color_ is NULL, the character will have the default color.
+Note: the string pointed by _color_ is NOT copied, so the string must be
+a literal string or a global variable.
+
+== RETURN VALUE
+No value is returned.
+
+== EXAMPLE
+This fills an 3 wide, 4 high area starting at (2, 2) and ending at
+(4, 5) with the character '@' and the default color:
+----
+cliscreen_fill(2, 2, 4, 5, '@', NULL);
+----
+
+== SEE ALSO
+*cliscreen_clear*(3),
+*cliscreen_setchar*(3),
+*cliscreen_puts*(3),
+*cliscreen_printf*(3)

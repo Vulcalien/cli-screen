@@ -1,0 +1,29 @@
+= cliscreen_setalign(3)
+:doctype: manpage
+:manmanual: Manual for libcliscreen
+:mansource: libcliscreen
+:manversion: 0.?.?
+
+== NAME
+cliscreen_setalign - set the screen's alignment
+
+== SYNOPSIS
+[verse]
+____
+*#include <cliscreen.h>*
+
+**void cliscreen_setalign(int **__align_x__**, int **__align_y__**);**
+____
+
+== DESCRIPTION
+The *cliscreen_setalign*() function sets the alignment of the screen.
+_align_x_ can be any of the following macros: 'CLISCREEN_ALIGN_X_LEFT',
+'CLISCREEN_ALIGN_X_CENTER', 'CLISCREEN_ALIGN_X_RIGHT'.
+_align_y_ can be any of the following macros: 'CLISCREEN_ALIGN_Y_TOP',
+'CLISCREEN_ALIGN_Y_MIDDLE', 'CLISCREEN_ALIGN_Y_BOTTOM'.
+
+== RETURN VALUE
+No value is returned.
+
+== SEE ALSO
+*cliscreen_setsize*(3)
