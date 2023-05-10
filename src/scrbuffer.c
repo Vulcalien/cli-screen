@@ -57,11 +57,9 @@ struct scrbuffer *scrbuffer_create(int raster_size) {
     return buf;
 }
 
-void scrbuffer_destroy(struct scrbuffer **buf) {
-    free((*buf)->chr_buf);
-    free(*buf);
-
-    *buf = NULL;
+void scrbuffer_destroy(struct scrbuffer *buf) {
+    free(buf->chr_buf);
+    free(buf);
 }
 
 void scrbuffer_putc(struct scrbuffer *buf, char chr) {

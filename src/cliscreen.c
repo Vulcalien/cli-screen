@@ -43,8 +43,6 @@ struct screen {
     bool should_clear_term;
 };
 
-static void cliscreen_free_memory(void);
-
 static struct screen *scr = NULL;
 
 static struct terminal_size last_term_size = { .w = 0, .h = 0 };
@@ -63,15 +61,27 @@ EXPORT int cliscreen_create(void) {
 }
 
 static void cliscreen_free_memory(void) {
-    if(scr->raster) free(scr->raster);
-    if(scr->colors) free(scr->colors);
-    if(scr->buf)    scrbuffer_destroy(&scr->buf);
+    if(scr->raster) {
+        free(scr->raster);
+        scr->raster = NULL;
+    }
+
+    if(scr->colors) {
+        free(scr->colors);
+        scr->colors = NULL;
+    }
+
+    if(scr->buf) {
+        scrbuffer_destroy(scr->buf);
+        scr->buf = NULL;
+    }
 }
 
 EXPORT void cliscreen_destroy(void) {
     if(scr) {
         cliscreen_free_memory();
         free(scr);
+        scr = NULL;
     }
 }
 

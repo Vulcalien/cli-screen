@@ -29,8 +29,8 @@ struct scrbuffer {
 /* Create a screen buffer. */
 extern struct scrbuffer *scrbuffer_create(int raster_size);
 
-/* Destroy a screen buffer and set the pointer to NULL. */
-extern void scrbuffer_destroy(struct scrbuffer **buf);
+/* Destroy a screen buffer. */
+extern void scrbuffer_destroy(struct scrbuffer *buf);
 
 /* Put a character inside a screen buffer. */
 extern void scrbuffer_putc(struct scrbuffer *buf, char chr);
