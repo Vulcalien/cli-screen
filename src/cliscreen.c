@@ -205,16 +205,24 @@ EXPORT void cliscreen_setchar(int x, int y, char c, const char *color) {
     scr->colors[x + y * scr->w] = color;
 }
 
+static inline int min(int a, int b) {
+    return a < b ? a : b;
+}
+
+static inline int max(int a, int b) {
+    return a > b ? a : b;
+}
+
 EXPORT void cliscreen_fill(int x0, int y0, int x1, int y1,
                            char c, const char *color) {
-    for(int yi = y0; yi <= y1; yi++) {
-        if(yi < 0 || yi >= scr->h) break;
-        for(int xi = x0; xi <= x1; xi++) {
-            if(xi < 0 || xi >= scr->w) break;
+    x0 = max(x0, 0);
+    y0 = max(y0, 0);
+    x1 = min(x1, scr->w - 1);
+    y1 = min(y1, scr->h - 1);
 
+    for(int yi = y0; yi <= y1; yi++)
+        for(int xi = x0; xi <= x1; xi++)
             cliscreen_setchar(xi, yi, c, color);
-        }
-    }
 }
 
 EXPORT void cliscreen_puts(int x, int y,
