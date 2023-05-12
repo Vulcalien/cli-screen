@@ -13,7 +13,7 @@
  * License along with this library.
  * If not, see <https://www.gnu.org/licenses/>.
  *
- * version: 0.5.0-WIP
+ * version: 0.5.0
  */
 #ifndef VULC_CLISCREEN_CORE
 #define VULC_CLISCREEN_CORE
