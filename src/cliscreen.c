@@ -205,10 +205,12 @@ EXPORT void cliscreen_setchar(int x, int y, char c, const char *color) {
     scr->colors[x + y * scr->w] = color;
 }
 
+#undef min
 static inline int min(int a, int b) {
     return a < b ? a : b;
 }
 
+#undef max
 static inline int max(int a, int b) {
     return a > b ? a : b;
 }
