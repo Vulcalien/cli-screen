@@ -1,5 +1,5 @@
 # Vulcalien's Library Makefile
-# version 0.3.0
+# version 0.3.2
 
 # === Detect OS ===
 ifeq ($(OS),Windows_NT)
@@ -12,49 +12,56 @@ TARGET_OS := $(CURRENT_OS)
 # === Basic Info ===
 OUT_FILENAME := libcliscreen
 
-SRC_DIRS := src
-
+SRC_DIR := src
 OBJ_DIR := obj
 BIN_DIR := bin
 
-# === C Flags ===
+SRC_SUBDIRS :=
+
+# === Compilation ===
 CPPFLAGS := -Iinclude -MMD -MP
 
 CFLAGS_STATIC := -Wall -pedantic
 CFLAGS_SHARED := -Wall -pedantic -fPIC -fvisibility=hidden
 
-# === Linker Flags ===
 ifeq ($(TARGET_OS),UNIX)
     # UNIX
+    CC := gcc
+
+    CPPFLAGS +=
+
+    CFLAGS_STATIC +=
+    CFLAGS_SHARED +=
+
     LDFLAGS := -shared
     LDLIBS  :=
 else ifeq ($(TARGET_OS),WINDOWS)
     ifeq ($(CURRENT_OS),WINDOWS)
         # WINDOWS
-        LDFLAGS := -shared
-        LDLIBS  :=
-    else ifeq ($(CURRENT_OS),UNIX)
-        # UNIX to WINDOWS cross-compile
-        LDFLAGS := -shared
-        LDLIBS  :=
-    endif
-endif
-
-# === Compilers ===
-ifeq ($(TARGET_OS),UNIX)
-    # UNIX
-    CC := gcc
-else ifeq ($(TARGET_OS),WINDOWS)
-    ifeq ($(CURRENT_OS),WINDOWS)
-        # WINDOWS
         CC := gcc
+
+        CPPFLAGS +=
+
+        CFLAGS_STATIC +=
+        CFLAGS_SHARED +=
+
+        LDFLAGS := -shared
+        LDLIBS  :=
     else ifeq ($(CURRENT_OS),UNIX)
         # UNIX to WINDOWS cross-compile
         CC := x86_64-w64-mingw32-gcc
+
+        CPPFLAGS +=
+
+        CFLAGS_STATIC +=
+        CFLAGS_SHARED +=
+
+        LDFLAGS := -shared
+        LDLIBS  :=
     endif
 endif
 
-# === OS Specific ===
+# === Extensions & Commands ===
 ifeq ($(TARGET_OS),UNIX)
     OBJ_EXT    := o
     STATIC_EXT := a
@@ -84,21 +91,25 @@ endif
 # list of source file extensions
 SRC_EXT := c
 
-OBJ_STATIC_DIR := $(OBJ_DIR)/static
-OBJ_SHARED_DIR := $(OBJ_DIR)/shared
+# list of source directories
+SRC_DIRS := $(SRC_DIR)\
+            $(foreach SUBDIR,$(SRC_SUBDIRS),$(SRC_DIR)/$(SUBDIR))
 
 # list of source files
 SRC := $(foreach DIR,$(SRC_DIRS),\
          $(foreach EXT,$(SRC_EXT),\
            $(wildcard $(DIR)/*.$(EXT))))
 
-# list of object files
-OBJ_STATIC := $(SRC:%=$(OBJ_STATIC_DIR)/%.$(OBJ_EXT))
-OBJ_SHARED := $(SRC:%=$(OBJ_SHARED_DIR)/%.$(OBJ_EXT))
+OBJ_STATIC_DIR := $(OBJ_DIR)/static
+OBJ_SHARED_DIR := $(OBJ_DIR)/shared
 
-# list of object directories
+# lists of object directories
 OBJ_STATIC_DIRS := $(SRC_DIRS:%=$(OBJ_STATIC_DIR)/%)
 OBJ_SHARED_DIRS := $(SRC_DIRS:%=$(OBJ_SHARED_DIR)/%)
+
+# lists of object files
+OBJ_STATIC := $(SRC:%=$(OBJ_STATIC_DIR)/%.$(OBJ_EXT))
+OBJ_SHARED := $(SRC:%=$(OBJ_SHARED_DIR)/%.$(OBJ_EXT))
 
 # output files
 OUT_STATIC := $(BIN_DIR)/$(OUT_FILENAME).$(STATIC_EXT)
