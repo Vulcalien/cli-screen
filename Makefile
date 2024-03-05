@@ -124,7 +124,7 @@ all: build-static build-shared
 build-static: $(OUT_STATIC)
 build-shared: $(OUT_SHARED)
 
-clean:
+clean::
 	@$(RM) $(RMFLAGS) $(BIN_DIR) $(OBJ_DIR)
 
 # generate static library file
