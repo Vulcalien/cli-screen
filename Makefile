@@ -118,7 +118,7 @@ all: build-static build-shared
 build-static: $(OUT_STATIC)
 build-shared: $(OUT_SHARED)
 
-clean::
+clean:
 	@$(RM) $(BIN_DIR) $(OBJ_DIR)
 
 # generate static library file
@@ -144,5 +144,4 @@ $(BIN_DIR) $(OBJ_STATIC_DIRS) $(OBJ_SHARED_DIRS):
 -include $(OBJ_STATIC:.$(OBJ_EXT)=.d)
 -include $(OBJ_SHARED:.$(OBJ_EXT)=.d)
 
--include doc/manpages.mk
 -include install.mk
