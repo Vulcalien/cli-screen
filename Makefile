@@ -1,5 +1,5 @@
 # Vulcalien's Library Makefile
-# version 0.3.2
+# version 0.3.3
 
 # === Detect OS ===
 ifeq ($(OS),Windows_NT)
@@ -73,17 +73,11 @@ else ifeq ($(TARGET_OS),WINDOWS)
 endif
 
 ifeq ($(CURRENT_OS),UNIX)
-    MKDIR      := mkdir
-    MKDIRFLAGS := -p
-
-    RM      := rm
-    RMFLAGS := -rfv
+    MKDIR := mkdir -p
+    RM    := rm -rfv
 else ifeq ($(CURRENT_OS),WINDOWS)
-    MKDIR      := mkdir
-    MKDIRFLAGS :=
-
-    RM      := rmdir
-    RMFLAGS := /Q /S
+    MKDIR := mkdir
+    RM    := rmdir /Q /S
 endif
 
 # === Resources ===
@@ -125,7 +119,7 @@ build-static: $(OUT_STATIC)
 build-shared: $(OUT_SHARED)
 
 clean::
-	@$(RM) $(RMFLAGS) $(BIN_DIR) $(OBJ_DIR)
+	@$(RM) $(BIN_DIR) $(OBJ_DIR)
 
 # generate static library file
 $(OUT_STATIC): $(OBJ_STATIC) | $(BIN_DIR)
@@ -145,7 +139,7 @@ $(OBJ_SHARED_DIR)/%.c.$(OBJ_EXT): %.c | $(OBJ_SHARED_DIRS)
 
 # create directories
 $(BIN_DIR) $(OBJ_STATIC_DIRS) $(OBJ_SHARED_DIRS):
-	$(MKDIR) $(MKDIRFLAGS) "$@"
+	$(MKDIR) "$@"
 
 -include $(OBJ_STATIC:.$(OBJ_EXT)=.d)
 -include $(OBJ_SHARED:.$(OBJ_EXT)=.d)
